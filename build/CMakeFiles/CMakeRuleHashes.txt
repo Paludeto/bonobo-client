@@ -1,0 +1,4 @@
+# Hashes of file build rules.
+199288bb69af862180104749156f4f3d CMakeFiles/roboap-client_autogen
+199288bb69af862180104749156f4f3d CMakeFiles/roboap-client_autogen_timestamp_deps
+e2438f41bb5b0ac71728dad878533d99 roboap-client_autogen/timestamp

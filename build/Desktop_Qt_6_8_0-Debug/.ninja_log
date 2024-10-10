@@ -1,0 +1,13 @@
+# ninja log v6
+1	7	1728587482928215143	/home/paludeto/roboap-client/build/Desktop_Qt_6_8_0-Debug/roboap-client_autogen/mocs_compilation.cpp	7b4adeb1892b33a1
+1	7	1728587482928215143	/home/paludeto/roboap-client/build/Desktop_Qt_6_8_0-Debug/roboap-client_autogen/timestamp	7b4adeb1892b33a1
+1	7	1728587482928215143	roboap-client_autogen/mocs_compilation.cpp	7b4adeb1892b33a1
+13	20	1728586980523979199	CMakeFiles/roboap-client.dir/roboap-client_autogen/mocs_compilation.cpp.o	26073fe6e8065ae3
+1	7	1728587482928215143	roboap-client_autogen/timestamp	7b4adeb1892b33a1
+14	650	1728586980524979188	CMakeFiles/roboap-client.dir/proto/replacement.pb.cc.o	12724f10725c55d8
+7	88	1728587482934215073	roboap-client	1c2f92387bdbc03a
+13	712	1728586980523979199	CMakeFiles/roboap-client.dir/main.cpp.o	6efa1035a6c0ef6b
+13	664	1728586980523979199	CMakeFiles/roboap-client.dir/proto/common.pb.cc.o	dc6f69db9e7e10e
+14	612	1728586980524979188	CMakeFiles/roboap-client.dir/proto/packet.pb.cc.o	ee62290b54389db9
+7	14	1728587438521733774	CMakeFiles/roboap-client.dir/clients/actuator/actuator.cpp.o	8d9724d64b444ccd
+13	611	1728586980523979199	CMakeFiles/roboap-client.dir/proto/command.pb.cc.o	9a6105c692228aba
