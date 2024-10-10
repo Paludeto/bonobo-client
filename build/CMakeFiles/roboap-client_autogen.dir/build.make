@@ -71,7 +71,7 @@ CMakeFiles/roboap-client_autogen: roboap-client_autogen/timestamp
 roboap-client_autogen/timestamp: /usr/lib64/qt5/bin/moc
 roboap-client_autogen/timestamp: CMakeFiles/roboap-client_autogen.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/home/paludeto/roboap-client/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target roboap-client"
-	/usr/bin/cmake -E cmake_autogen /home/paludeto/roboap-client/build/CMakeFiles/roboap-client_autogen.dir/AutogenInfo.json ""
+	/usr/bin/cmake -E cmake_autogen /home/paludeto/roboap-client/build/CMakeFiles/roboap-client_autogen.dir/AutogenInfo.json Debug
 	/usr/bin/cmake -E touch /home/paludeto/roboap-client/build/roboap-client_autogen/timestamp
 
 roboap-client_autogen: CMakeFiles/roboap-client_autogen

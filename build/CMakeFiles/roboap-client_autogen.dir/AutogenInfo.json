@@ -35,6 +35,11 @@
 		"/usr/lib64/cmake/Qt5Core/Qt5CoreConfigExtrasMkspecDir.cmake",
 		"/usr/lib64/cmake/Qt5Core/Qt5CoreMacros.cmake",
 		"/usr/share/cmake/Modules/CMakeParseArguments.cmake",
+		"/usr/lib64/cmake/Qt5Network/Qt5NetworkConfigVersion.cmake",
+		"/usr/lib64/cmake/Qt5Network/Qt5NetworkConfig.cmake",
+		"/usr/lib64/cmake/Qt5Network/Qt5Network_QConnmanEnginePlugin.cmake",
+		"/usr/lib64/cmake/Qt5Network/Qt5Network_QGenericEnginePlugin.cmake",
+		"/usr/lib64/cmake/Qt5Network/Qt5Network_QNetworkManagerEnginePlugin.cmake",
 		"/usr/share/cmake/Modules/FindProtobuf.cmake",
 		"/usr/share/cmake/Modules/SelectLibraryConfigurations.cmake",
 		"/usr/share/cmake/Modules/FindThreads.cmake",
@@ -81,7 +86,7 @@
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
 	"INCLUDE_DIR" : "/home/paludeto/roboap-client/build/roboap-client_autogen/include",
 	"MOC_COMPILATION_FILE" : "/home/paludeto/roboap-client/build/roboap-client_autogen/mocs_compilation.cpp",
-	"MOC_DEFINITIONS" : [ "QT_CORE_LIB", "QT_NO_DEBUG" ],
+	"MOC_DEFINITIONS" : [ "QT_CORE_LIB", "QT_NETWORK_LIB" ],
 	"MOC_DEPEND_FILTERS" : 
 	[
 		[
@@ -96,6 +101,7 @@
 		"/usr/include/qt5",
 		"/usr/include/qt5/QtCore",
 		"/usr/lib64/qt5/mkspecs/linux-g++",
+		"/usr/include/qt5/QtNetwork",
 		"/usr/include/c++/14",
 		"/usr/include/c++/14/x86_64-redhat-linux",
 		"/usr/include/c++/14/backward",
@@ -128,6 +134,12 @@
 	"SETTINGS_FILE" : "/home/paludeto/roboap-client/build/CMakeFiles/roboap-client_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
+		[
+			"/home/paludeto/roboap-client/clients/actuator/actuator.cpp",
+			"MU",
+			null
+		],
+		[ "/home/paludeto/roboap-client/clients/client.cpp", "MU", null ],
 		[ "/home/paludeto/roboap-client/main.cpp", "MU", null ],
 		[ "/home/paludeto/roboap-client/proto/command.pb.cc", "MU", null ],
 		[ "/home/paludeto/roboap-client/proto/common.pb.cc", "MU", null ],

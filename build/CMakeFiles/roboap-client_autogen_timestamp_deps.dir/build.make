@@ -68,6 +68,7 @@ include CMakeFiles/roboap-client_autogen_timestamp_deps.dir/progress.make
 
 CMakeFiles/roboap-client_autogen_timestamp_deps: /usr/lib64/libQt5Core.so.5.15.15
 CMakeFiles/roboap-client_autogen_timestamp_deps: /usr/lib64/qt5/bin/moc
+CMakeFiles/roboap-client_autogen_timestamp_deps: /usr/lib64/libQt5Network.so.5.15.15
 
 roboap-client_autogen_timestamp_deps: CMakeFiles/roboap-client_autogen_timestamp_deps
 roboap-client_autogen_timestamp_deps: CMakeFiles/roboap-client_autogen_timestamp_deps.dir/build.make

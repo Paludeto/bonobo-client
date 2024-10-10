@@ -1,6 +1,11 @@
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
 
+# VSCode and build jank
+/build
+/.vscode
+
+# Autogen
 *~
 *.autosave
 *.a

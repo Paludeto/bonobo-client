@@ -9,6 +9,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "" "roboap-client_autogen/timestamp" "custom" "roboap-client_autogen/deps"
+  "/home/paludeto/roboap-client/clients/actuator/actuator.cpp" "CMakeFiles/roboap-client.dir/clients/actuator/actuator.cpp.o" "gcc" "CMakeFiles/roboap-client.dir/clients/actuator/actuator.cpp.o.d"
+  "/home/paludeto/roboap-client/clients/client.cpp" "CMakeFiles/roboap-client.dir/clients/client.cpp.o" "gcc" "CMakeFiles/roboap-client.dir/clients/client.cpp.o.d"
   "/home/paludeto/roboap-client/main.cpp" "CMakeFiles/roboap-client.dir/main.cpp.o" "gcc" "CMakeFiles/roboap-client.dir/main.cpp.o.d"
   "/home/paludeto/roboap-client/proto/command.pb.cc" "CMakeFiles/roboap-client.dir/proto/command.pb.cc.o" "gcc" "CMakeFiles/roboap-client.dir/proto/command.pb.cc.o.d"
   "/home/paludeto/roboap-client/proto/common.pb.cc" "CMakeFiles/roboap-client.dir/proto/common.pb.cc.o" "gcc" "CMakeFiles/roboap-client.dir/proto/common.pb.cc.o.d"

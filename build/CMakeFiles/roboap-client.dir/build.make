@@ -72,7 +72,7 @@ include CMakeFiles/roboap-client.dir/flags.make
 roboap-client_autogen/timestamp: /usr/lib64/qt5/bin/moc
 roboap-client_autogen/timestamp: CMakeFiles/roboap-client.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/home/paludeto/roboap-client/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target roboap-client"
-	/usr/bin/cmake -E cmake_autogen /home/paludeto/roboap-client/build/CMakeFiles/roboap-client_autogen.dir/AutogenInfo.json ""
+	/usr/bin/cmake -E cmake_autogen /home/paludeto/roboap-client/build/CMakeFiles/roboap-client_autogen.dir/AutogenInfo.json Debug
 	/usr/bin/cmake -E touch /home/paludeto/roboap-client/build/roboap-client_autogen/timestamp
 
 CMakeFiles/roboap-client.dir/roboap-client_autogen/mocs_compilation.cpp.o: CMakeFiles/roboap-client.dir/flags.make
@@ -159,6 +159,34 @@ CMakeFiles/roboap-client.dir/proto/replacement.pb.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/roboap-client.dir/proto/replacement.pb.cc.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/paludeto/roboap-client/proto/replacement.pb.cc -o CMakeFiles/roboap-client.dir/proto/replacement.pb.cc.s
 
+CMakeFiles/roboap-client.dir/clients/actuator/actuator.cpp.o: CMakeFiles/roboap-client.dir/flags.make
+CMakeFiles/roboap-client.dir/clients/actuator/actuator.cpp.o: /home/paludeto/roboap-client/clients/actuator/actuator.cpp
+CMakeFiles/roboap-client.dir/clients/actuator/actuator.cpp.o: CMakeFiles/roboap-client.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/paludeto/roboap-client/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/roboap-client.dir/clients/actuator/actuator.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/roboap-client.dir/clients/actuator/actuator.cpp.o -MF CMakeFiles/roboap-client.dir/clients/actuator/actuator.cpp.o.d -o CMakeFiles/roboap-client.dir/clients/actuator/actuator.cpp.o -c /home/paludeto/roboap-client/clients/actuator/actuator.cpp
+
+CMakeFiles/roboap-client.dir/clients/actuator/actuator.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/roboap-client.dir/clients/actuator/actuator.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/paludeto/roboap-client/clients/actuator/actuator.cpp > CMakeFiles/roboap-client.dir/clients/actuator/actuator.cpp.i
+
+CMakeFiles/roboap-client.dir/clients/actuator/actuator.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/roboap-client.dir/clients/actuator/actuator.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/paludeto/roboap-client/clients/actuator/actuator.cpp -o CMakeFiles/roboap-client.dir/clients/actuator/actuator.cpp.s
+
+CMakeFiles/roboap-client.dir/clients/client.cpp.o: CMakeFiles/roboap-client.dir/flags.make
+CMakeFiles/roboap-client.dir/clients/client.cpp.o: /home/paludeto/roboap-client/clients/client.cpp
+CMakeFiles/roboap-client.dir/clients/client.cpp.o: CMakeFiles/roboap-client.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/paludeto/roboap-client/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/roboap-client.dir/clients/client.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/roboap-client.dir/clients/client.cpp.o -MF CMakeFiles/roboap-client.dir/clients/client.cpp.o.d -o CMakeFiles/roboap-client.dir/clients/client.cpp.o -c /home/paludeto/roboap-client/clients/client.cpp
+
+CMakeFiles/roboap-client.dir/clients/client.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/roboap-client.dir/clients/client.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/paludeto/roboap-client/clients/client.cpp > CMakeFiles/roboap-client.dir/clients/client.cpp.i
+
+CMakeFiles/roboap-client.dir/clients/client.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/roboap-client.dir/clients/client.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/paludeto/roboap-client/clients/client.cpp -o CMakeFiles/roboap-client.dir/clients/client.cpp.s
+
 # Object files for target roboap-client
 roboap__client_OBJECTS = \
 "CMakeFiles/roboap-client.dir/roboap-client_autogen/mocs_compilation.cpp.o" \
@@ -166,7 +194,9 @@ roboap__client_OBJECTS = \
 "CMakeFiles/roboap-client.dir/proto/command.pb.cc.o" \
 "CMakeFiles/roboap-client.dir/proto/common.pb.cc.o" \
 "CMakeFiles/roboap-client.dir/proto/packet.pb.cc.o" \
-"CMakeFiles/roboap-client.dir/proto/replacement.pb.cc.o"
+"CMakeFiles/roboap-client.dir/proto/replacement.pb.cc.o" \
+"CMakeFiles/roboap-client.dir/clients/actuator/actuator.cpp.o" \
+"CMakeFiles/roboap-client.dir/clients/client.cpp.o"
 
 # External object files for target roboap-client
 roboap__client_EXTERNAL_OBJECTS =
@@ -177,11 +207,14 @@ roboap-client: CMakeFiles/roboap-client.dir/proto/command.pb.cc.o
 roboap-client: CMakeFiles/roboap-client.dir/proto/common.pb.cc.o
 roboap-client: CMakeFiles/roboap-client.dir/proto/packet.pb.cc.o
 roboap-client: CMakeFiles/roboap-client.dir/proto/replacement.pb.cc.o
+roboap-client: CMakeFiles/roboap-client.dir/clients/actuator/actuator.cpp.o
+roboap-client: CMakeFiles/roboap-client.dir/clients/client.cpp.o
 roboap-client: CMakeFiles/roboap-client.dir/build.make
-roboap-client: /usr/lib64/libQt5Core.so.5.15.15
+roboap-client: /usr/lib64/libQt5Network.so.5.15.15
 roboap-client: /usr/lib64/libprotobuf.so
+roboap-client: /usr/lib64/libQt5Core.so.5.15.15
 roboap-client: CMakeFiles/roboap-client.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/paludeto/roboap-client/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable roboap-client"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/paludeto/roboap-client/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable roboap-client"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/roboap-client.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
