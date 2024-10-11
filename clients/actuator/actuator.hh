@@ -1,10 +1,13 @@
 #ifndef ACTUATOR_H
 #define ACTUATOR_H
 
-class actuator
+#include <client.hh>
+#include 
+
+class Actuator
 {
 public:
-    actuator();
+    Actuator();
 };
 
 #endif // ACTUATOR_H
