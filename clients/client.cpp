@@ -1,4 +1,4 @@
-#include "client.hh"
+#include "client.h"
 
 Client::Client(QString serverAddress, quint16 serverPort) {
     _serverAddress = serverAddress;
