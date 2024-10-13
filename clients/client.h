@@ -2,12 +2,12 @@
 #define CLIENT_H
 
 #include <iostream>
-#include <QMutex>
-#include <QUdpSocket>
-#include <QReadWriteLock>
-#include <QNetworkDatagram>
+#include <QMutex>   // Only one proccess may execute a portion of some given code.
+#include <QUdpSocket>   // Communication via UDP protocol. Sends data in real time via the QUdpSocket class.
+#include <QReadWriteLock>   // Prevents simultaneous read/write operations by threads.
+#include <QNetworkDatagram> // Handles UDP sockets.
 
-// Abstract class that is supposed to be extended by other clients
+// Base class that is supposed to be extended by other clients
 class Client
 {
 public:
@@ -16,7 +16,7 @@ public:
     void run();
     void close();
 protected:
-    QUdpSocket *_clientSocket;
+    QUdpSocket *_clientSocket;  // Uses UDP socket to send data.
     QString _serverAddress;
     quint16 _serverPort;
 

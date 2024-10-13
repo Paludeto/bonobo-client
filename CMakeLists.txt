@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Find Qt package
-find_package(Qt6 COMPONENTS Core Network REQUIRED)
+find_package(Qt6 COMPONENTS Core Network Gui REQUIRED)
 
 # Specify clients directory
 set(CLIENTS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/clients")
