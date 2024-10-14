@@ -1,11 +1,11 @@
 #include <QCoreApplication>
 
 #include <thread>
-#include <utils/timer/timer.h>
-#include <clients/vision/vision.h>
-#include <clients/referee/referee.h>
-#include <clients/actuator/actuator.h>
-#include <clients/replacer/replacer.h>
+#include <timer/timer.h>
+#include <vision/vision.h>
+#include <referee/referee.h>
+#include <actuator/actuator.h>
+#include <replacer/replacer.h>
 
 int main(int argc, char *argv[]) {
     QCoreApplication a(argc, argv);
@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
         visionClient->run();
         refereeClient->run();
 
-        // Gets last Environment. 
+        // Gets last Environment. An environment has step, frame, field and number of goals. Step is (most likely) the number of frames polled.
         fira_message::sim_to_ref::Environment lastEnv = visionClient->getLastEnvironment();
         if(lastEnv.has_frame()) {
             // Taking last frame
@@ -92,6 +92,7 @@ int main(int argc, char *argv[]) {
         timer.stop();
 
         // Since we want the loop to run at a 60Hz frequency, we use T = 10E3 / f to get the remaining time in miliSeconds and subtract the elapsed time
+        long remainingTime = (1000 / freq) - timer.getMiliSeconds();
         std::this_thread::sleep_for(std::chrono::milliseconds(remainingTime));  // Pauses current thread until remaining time
     }
 

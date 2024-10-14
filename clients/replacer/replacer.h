@@ -3,9 +3,9 @@
 
 #include <QVector2D>
 
-#include <clients/client.h>
-#include <proto/vssref_placement.pb.h>
-#include <proto/vssref_common.pb.h>
+#include <client.h>
+#include <vssref_placement.pb.h>
+#include <vssref_common.pb.h>
 
 // Class used to place robots at given coordinates. Part of VSSRef.
 class ReplacerClient : public Client

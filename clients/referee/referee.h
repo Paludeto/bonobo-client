@@ -1,7 +1,7 @@
 #ifndef REFEREECLIENT_H
 #define REFEREECLIENT_H
 
-#include <clients/client.h>
+#include <client.h>
 #include <vssref_command.pb.h>
 
 // Class used to retrieve data (fouls) from the referee. Part of VSSRef.

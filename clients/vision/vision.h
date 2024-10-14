@@ -1,8 +1,8 @@
 #ifndef VISIONCLIENT_H
 #define VISIONCLIENT_H
 
-#include <clients/client.h>
-#include <proto/packet.pb.h>
+#include <client.h>
+#include <packet.pb.h>
 
 class VisionClient : public Client
 {
