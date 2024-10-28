@@ -1,7 +1,7 @@
 #ifndef ACTUATOR_H
 #define ACTUATOR_H
 
-#include <client.h>
+#include "client.h"
 #include <vssref_common.pb.h>
 #include <packet.pb.h>
 

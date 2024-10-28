@@ -3,7 +3,7 @@
 
 #include <QVector2D>
 
-#include <client.h>
+#include "client.h"
 #include <vssref_placement.pb.h>
 #include <vssref_common.pb.h>
 
