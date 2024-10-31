@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
 
     VisionClient *visionClient = new VisionClient("224.0.0.1", 10002);
     ActuatorClient *actuatorClient = new ActuatorClient("127.0.0.1", 20011);
-    WorldMap wm(visionClient);
+    WorldMap *wm = new WorldMap(visionClient);
 
     // Setting our color as BLUE at left side
     VSSRef::Color ourColor = VSSRef::Color::YELLOW;
@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
     while(1) {
         
         visionClient->run();
-        wm.updateFrame();
+        wm->updateFrame();
     
         // Stop timer
         timer.stop();
