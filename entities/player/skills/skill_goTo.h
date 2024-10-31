@@ -1,0 +1,23 @@
+#ifndef SKILL_GOTO
+#define SKILL_GOTO
+
+#include "skill_manager.h"
+
+class GoTo : public SkillManager 
+{
+
+public:
+    
+    explicit GoTo(Player* player, QVector2D &targetCoordinates) : SkillManager(player), _targetCoordinates(targetCoordinates)
+    {};
+
+    void runSkill() override;
+
+    void goTo(QVector2D &targetCoordinates);
+
+    QVector2D &_targetCoordinates;
+
+};
+
+#endif
+

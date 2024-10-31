@@ -33,7 +33,13 @@ int main(int argc, char *argv[]) {
         
         visionClient->run();
         wm->updateFrame();
-    
+
+        if (!wm->_blueTeam.isEmpty()) {
+            wm->_blueTeam[0]->_actuator = actuatorClient;
+            wm->_blueTeam[0]->goTo(wm->_ballPosition);
+        }
+        
+
         // Stop timer
         timer.stop();
 

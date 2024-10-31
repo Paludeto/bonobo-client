@@ -17,53 +17,32 @@ void WorldMap::updateFrame() {
     
 }
 
+
 void WorldMap::updatePlayers(Color teamColor) {
 
-    if (teamColor == Color::BLUE) {
+    auto& teamList = (teamColor == Color::BLUE) ? _blueTeam : _yellowTeam;
+    auto robotCount = (teamColor == Color::BLUE) ? _lastFrame.robots_blue_size() : _lastFrame.robots_yellow_size();
+
+    // Resize team if needed
+    if (teamList.size() != robotCount) {
+
+        qDeleteAll(teamList);
+        teamList.clear();
+        for (int id = 0; id < robotCount; ++id) {
+            teamList.append(new Player(teamColor, id));
+        }
         
-        if (_blueTeam.size() != _lastFrame.robots_blue_size()) {
-
-            _blueTeam.clear();
-
-            for (int id = 0; id < _lastFrame.robots_blue_size(); id++) {
-                _blueTeam.append(Player(Color::BLUE, id));
-            }
-
-        }
-
-        for (int id = 0; id < _lastFrame.robots_blue_size(); id++) {
-
-            _blueTeam[id]._coordinates = QVector2D(_lastFrame.robots_blue(id).x(), _lastFrame.robots_blue(id).y());
-            _blueTeam[id]._orientation = _lastFrame.robots_blue(id).orientation();
-            _blueTeam[id]._vX = _lastFrame.robots_blue(id).vx();
-            _blueTeam[id]._vY = _lastFrame.robots_blue(id).vy();
-
-        }
-
-    } else {
-      
-        if (_yellowTeam.size() != _lastFrame.robots_yellow_size()) {
-
-            _yellowTeam.clear();
-
-            for (int id = 0; id < _lastFrame.robots_yellow_size(); id++) {
-                _yellowTeam.append(Player(Color::YELLOW, id));
-
-            }
-
-        }
-
-        for (int id = 0; id < _lastFrame.robots_yellow_size(); id++) {
-
-            _yellowTeam[id]._coordinates = QVector2D(_lastFrame.robots_yellow(id).x(), _lastFrame.robots_yellow(id).y());
-            _yellowTeam[id]._orientation = _lastFrame.robots_yellow(id).orientation();
-            _yellowTeam[id]._vX = _lastFrame.robots_yellow(id).vx();
-            _yellowTeam[id]._vY = _lastFrame.robots_yellow(id).vy();
-
-        }
-
     }
-    
+
+    // Update player data without copying
+    for (int id = 0; id < robotCount; ++id) {
+        auto& robot = (teamColor == Color::BLUE) ? _lastFrame.robots_blue(id) : _lastFrame.robots_yellow(id);
+        teamList[id]->_coordinates = QVector2D(robot.x(), robot.y());
+        teamList[id]->_orientation = robot.orientation();
+        teamList[id]->_vX = robot.vx();
+        teamList[id]->_vY = robot.vy();
+    }
+
 }
 
 void WorldMap::updateBallPosition() {

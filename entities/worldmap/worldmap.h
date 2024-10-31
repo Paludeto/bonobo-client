@@ -15,6 +15,11 @@ public:
     WorldMap(VisionClient *visionClient) : _frameUpdater(visionClient) 
     {};
 
+    ~WorldMap() {
+        qDeleteAll(_blueTeam);   
+        qDeleteAll(_yellowTeam);  
+    }
+
     void updateBallPosition();
     void updatePlayers(Color color);
     void updateFrame();
@@ -22,8 +27,8 @@ public:
 public:
 
     fira_message::Frame _lastFrame;
-    QList<Player> _blueTeam;
-    QList<Player> _yellowTeam;
+    QList<Player *> _blueTeam;
+    QList<Player *> _yellowTeam;
     VisionClient *_frameUpdater;
     QVector2D _ballPosition;
 
