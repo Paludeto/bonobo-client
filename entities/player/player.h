@@ -18,7 +18,9 @@ public:
     {}
 
     Player(Color color, quint8 id, ActuatorClient *actuator) : _playerColor(color), _playerId(id), _actuator(actuator)  
-    {};
+    {
+        _actuator->setTeamColor(this->_playerColor);
+    };
 
     Color getPlayerColor();
 
