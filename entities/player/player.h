@@ -25,9 +25,6 @@ public:
     float getLinearSpeed();
 
     QVector2D getCoordinates();
-
-    // to be implemented
-    void goTo();
     
 protected:
 

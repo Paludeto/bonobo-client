@@ -25,12 +25,6 @@ float Player::getLinearSpeed() {
 
 }
 
-void Player::goTo() {
-
-    
-
-}
-
 QVector2D Player::getCoordinates() {
 
     return _coordinates;

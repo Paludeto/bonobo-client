@@ -7,7 +7,6 @@
 #include "actuator/actuator.h"
 #include "replacer/replacer.h"
 #include "worldmap/worldmap.h"
-#include "player/skills/skills.h"
 
 int main(int argc, char *argv[]) {
     QCoreApplication a(argc, argv);
@@ -34,15 +33,6 @@ int main(int argc, char *argv[]) {
         
         visionClient->run();
         wm.updateFrame();
-        
-
-        if (wm._blueTeam.isEmpty()) {
-            std::cout << "Blue team empty\n";
-        } else {
-            Skills player1(&wm._blueTeam[0], actuatorClient);
-            player1.goTo(wm._ballPosition);
-        }
-        
     
         // Stop timer
         timer.stop();
