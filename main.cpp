@@ -7,6 +7,7 @@
 #include "actuator/actuator.h"
 #include "replacer/replacer.h"
 #include "worldmap/worldmap.h"
+#include "coach/coach.h"
 
 int main(int argc, char *argv[]) {
     QCoreApplication a(argc, argv);
@@ -17,8 +18,9 @@ int main(int argc, char *argv[]) {
     VisionClient *visionClient = new VisionClient("224.0.0.1", 10002);
     ActuatorClient *actuatorClient = new ActuatorClient("127.0.0.1", 20011);
     WorldMap *wm = new WorldMap(visionClient);
-
-    // Setting our color as BLUE at left side
+    Coach *coach = new Coach(wm, actuatorClient);
+    
+    // Setting our color as YELLOW at left side
     VSSRef::Color ourColor = VSSRef::Color::YELLOW;
     bool ourSideIsLeft = false;
 
@@ -26,20 +28,18 @@ int main(int argc, char *argv[]) {
     float freq = 60.0;
 
     // Setting actuator and replacer teamColor
-    actuatorClient->setTeamColor(ourColor);
     
+    actuatorClient->setTeamColor(ourColor);
 
     while(1) {
-        
+
         visionClient->run();
         wm->updateFrame();
 
         if (!wm->_blueTeam.isEmpty()) {
-            wm->_blueTeam[0]->_actuator = actuatorClient;
-            wm->_blueTeam[0]->goTo(wm->_ballPosition);
+            coach->runCoach(ourColor);
         }
-        
-
+    
         // Stop timer
         timer.stop();
 

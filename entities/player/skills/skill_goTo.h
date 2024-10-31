@@ -9,11 +9,11 @@ class GoTo : public SkillManager
 public:
     
     explicit GoTo(Player* player, QVector2D &targetCoordinates) : SkillManager(player), _targetCoordinates(targetCoordinates)
-    {};
+    {}
 
-    void runSkill() override;
+    void runSkill(ActuatorClient *actuator) override;
 
-    void goTo(QVector2D &targetCoordinates);
+    void goTo(QVector2D &targetCoordinates, ActuatorClient *actuator);
 
     QVector2D &_targetCoordinates;
 

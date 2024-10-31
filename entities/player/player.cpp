@@ -26,11 +26,11 @@ float Player::getLinearSpeed() {
 
 }
 
-void Player::goTo(QVector2D &targetCoordinates) {
+void Player::goTo(QVector2D &targetCoordinates, ActuatorClient *actuator) {
 
     _skillManager = std::make_unique<GoTo>(this, targetCoordinates);
 
-    _skillManager->runSkill();
+    _skillManager->runSkill(actuator);
 
 }
 

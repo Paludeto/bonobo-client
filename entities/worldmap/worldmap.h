@@ -13,7 +13,7 @@ class WorldMap
 public:
 
     WorldMap(VisionClient *visionClient) : _frameUpdater(visionClient) 
-    {};
+    {}
 
     ~WorldMap() {
         qDeleteAll(_blueTeam);   

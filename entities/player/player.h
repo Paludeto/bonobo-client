@@ -17,24 +17,17 @@ public:
     Player(Color color, quint8 id) : _playerColor(color), _playerId(id) 
     {}
 
-    Player(Color color, quint8 id, ActuatorClient *actuator) : _playerColor(color), _playerId(id), _actuator(actuator)  
-    {
-        _actuator->setTeamColor(this->_playerColor);
-    };
-
     Color getPlayerColor();
 
     quint8 getPlayerId();
 
-    void goTo(QVector2D &targetCoordinates);
+    void goTo(QVector2D &targetCoordinates, ActuatorClient *actuator);
 
     float getOrientation();
 
     float getLinearSpeed(); // Implement
 
     QVector2D getCoordinates();
-
-    ActuatorClient *_actuator;
     
 protected:
 
