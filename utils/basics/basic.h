@@ -9,7 +9,9 @@ class Basic
 
 public:
 
-    static float getAngle(QVector2D current, QVector2D &target);
+    static float getAngle(QVector2D currentPos, QVector2D &targetPos);
+
+    static float getDistance(QVector2D currentPos, QVector2D &targetPos);
 
 };
 

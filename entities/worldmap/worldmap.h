@@ -6,26 +6,40 @@
 #include "vssref_common.pb.h"
 #include <QVector2D>
 
+#define MAX_PLAYERS 3
+
 class WorldMap
 
 {
 
 public:
 
+    // Lazy initializing lists, object pooling technique
     WorldMap(VisionClient *visionClient) : _frameUpdater(visionClient) 
-    {}
+    {
+        initializeTeamPool(_blueTeam, Color::BLUE, MAX_PLAYERS);
+        initializeTeamPool(_yellowTeam, Color::YELLOW, MAX_PLAYERS);
+    }
 
     ~WorldMap() {
         qDeleteAll(_blueTeam);   
         qDeleteAll(_yellowTeam);  
     }
 
+    // All of these should be boolean values and need to be checked -TODO
     void updateBallPosition();
     void updatePlayers(Color color);
-    void updateFrame();
+    bool updateFrame();
 
-public:
+    QList<Player *> getTeam(Color color);
 
+    QVector2D &getBallPosition();
+
+private:
+
+    // Object pooling (reduces allocation and deletion)
+    void initializeTeamPool(QList<Player *> playerList, Color color, quint8 maxSize);
+    
     fira_message::Frame _lastFrame;
     QList<Player *> _blueTeam;
     QList<Player *> _yellowTeam;

@@ -12,23 +12,22 @@
 int main(int argc, char *argv[]) {
     QCoreApplication a(argc, argv);
 
+    // Setting our color as YELLOW
+    VSSRef::Color ourColor = VSSRef::Color::YELLOW;
+
+    // Desired frequency in hz
+    float freq = 60.0;
+
     // Starting timer
     Timer timer;
 
     VisionClient *visionClient = new VisionClient("224.0.0.1", 10002);
     ActuatorClient *actuatorClient = new ActuatorClient("127.0.0.1", 20011);
     WorldMap *wm = new WorldMap(visionClient);
-    Coach *coach = new Coach(wm, actuatorClient);
+    Coach *coach = new Coach(wm, actuatorClient, ourColor);
     
-    // Setting our color as YELLOW at left side
-    VSSRef::Color ourColor = VSSRef::Color::YELLOW;
-    bool ourSideIsLeft = false;
-
-    // Desired frequency in hz
-    float freq = 60.0;
-
+   
     // Setting actuator and replacer teamColor
-    
     actuatorClient->setTeamColor(ourColor);
 
     while(1) {
@@ -36,8 +35,8 @@ int main(int argc, char *argv[]) {
         visionClient->run();
         wm->updateFrame();
 
-        if (!wm->_blueTeam.isEmpty()) {
-            coach->runCoach(ourColor);
+        if (wm->updateFrame() == true) {
+            coach->runCoach();
         }
     
         // Stop timer

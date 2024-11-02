@@ -1,15 +1,16 @@
 #include "coach.h"
 
-void Coach::runCoach(Color color) {
 
-    _actuator->setTeamColor(color);
+void Coach::setTeam(Color color) {
 
-    if (color == Color::BLUE) {
-        _ourTeam = _wm->_blueTeam;
-    } else {
-        _ourTeam = _wm->_yellowTeam;
-    }
+    _ourTeam = _wm->getTeam(color);
 
-    _ourTeam[0]->goTo(_wm->_ballPosition, _actuator);
+}
+
+void Coach::runCoach() {
+
+    setTeam(_ourColor);
+
+    _ourTeam[0]->goTo(_wm->getBallPosition(), _actuator);
 
 }
