@@ -4,7 +4,7 @@
 // Implement buffering in vision.cpp to avoid networki spikes
 bool WorldMap::updateFrame() {
     
-    auto start = std::chrono::high_resolution_clock::now();
+    // auto start = std::chrono::high_resolution_clock::now();
 
     const fira_message::sim_to_ref::Environment &lastEnv = _frameUpdater->getLastEnvironment();
 
@@ -19,11 +19,11 @@ bool WorldMap::updateFrame() {
     updatePlayers(Color::YELLOW);
     updateBallPosition();
 
-    auto end = std::chrono::high_resolution_clock::now();
+    // auto end = std::chrono::high_resolution_clock::now();
 
-    auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
+    // auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
     
-    std::cout << "Frame update runtime: " << duration << std::endl;
+    // std::cout << "Frame update runtime: " << duration << std::endl;
 
     return true;
 
