@@ -27,6 +27,8 @@ public:
 
     float getLinearSpeed(); // Implement
 
+    void rotateTo(QVector2D &targetPosition, ActuatorClient *actuator);
+
     QVector2D getCoordinates();
     
 protected:
