@@ -12,7 +12,7 @@ void GoTo::goTo(QVector2D &targetCoordinates, ActuatorClient *actuator) {
         robotAngle = Basic::normalizeAngle(robotAngle + M_PI);
     }
 
-    // Calculate angle error and motor speed using proportional control (P)
+    // Calculate angle error and motor speed using proportional and derivative control (PD)
     float angleError = Basic::smallestAngleDiff(robotAngle, targetAngle);
     float motorSpeed = std::clamp(KP * angleError + KD * (angleError - lastError), -BASE_SPEED, BASE_SPEED);
     lastError = angleError;
