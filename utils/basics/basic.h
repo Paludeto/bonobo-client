@@ -13,6 +13,11 @@ public:
 
     static float getDistance(QVector2D currentPos, QVector2D &targetPos);
 
+    static float smallestAngleDiff(float &currentAng , float &targetAng);
+
+    static bool checkCanBeReversed(float &currentAng, float targetAng);
+
+    static float normalizeAngle(const float &angle);
 };
 
 
