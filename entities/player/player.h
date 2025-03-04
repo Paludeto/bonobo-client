@@ -6,6 +6,7 @@
 #include "skills/skill_manager.h"
 #include "actuator/actuator.h"
 
+class WorldMap;
 using VSSRef::Color;
 class Player 
 
@@ -23,13 +24,17 @@ public:
 
     void goTo(QVector2D &targetCoordinates, ActuatorClient *actuator);
 
-    float getOrientation();
+    float &getOrientation();
 
     float getLinearSpeed(); // Implement
+
+    QVector2D getVelocity();
 
     void rotateTo(QVector2D &targetPosition, ActuatorClient *actuator);
 
     QVector2D getCoordinates();
+
+    void pathPlanning(QVector2D& targetPosition, WorldMap *worldMap, float robotRadius, ActuatorClient *actuator);
     
 protected:
 
@@ -37,11 +42,13 @@ protected:
 
     std::unique_ptr<SkillManager> _skillManager;
 
+    WorldMap *worldMap;
     quint8 _playerId;
     Color _playerColor;
     float _vX, _vY;
     float _orientation;
     QVector2D _coordinates;
+    int _rrtStuckCounter = 0;
 
 };
 

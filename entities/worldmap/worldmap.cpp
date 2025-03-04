@@ -89,5 +89,9 @@ QList<Player *> WorldMap::getTeam(Color color) {
     } else {
         throw std::invalid_argument("Invalid team color specified");
     }
-
 }
+
+fira_message::sim_to_ref::Environment WorldMap::getEnvironment() {
+    return _frameUpdater->getLastEnvironment();
+}
+

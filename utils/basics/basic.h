@@ -11,7 +11,7 @@ public:
 
     static float getAngle(QVector2D currentPos, QVector2D &targetPos);
 
-    static float getDistance(QVector2D currentPos, QVector2D &targetPos);
+    static float getDistance(const QVector2D currentPos, const QVector2D &targetPos);
 
     static float smallestAngleDiff(float &currentAng , float &targetAng);
 

@@ -35,6 +35,8 @@ public:
 
     QVector2D &getBallPosition();
 
+    fira_message::sim_to_ref::Environment getEnvironment();
+
 private:
 
     // Object pooling (reduces allocation and deletion)

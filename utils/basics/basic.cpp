@@ -9,7 +9,7 @@ float Basic::getAngle(QVector2D currentPos, QVector2D &targetPos) {
 
 }
 
-float Basic::getDistance(QVector2D currentPos, QVector2D &targetPos) {
+float Basic::getDistance(const QVector2D currentPos, const QVector2D &targetPos) {
 
     return sqrt(pow(targetPos.x() - currentPos.x(), 2) + pow(targetPos.y() - currentPos.y(), 2));
 
