@@ -39,9 +39,11 @@ bool RRTPathExecution::executePathStep(RRT* rrt, ActuatorClient *actuator) {
     QVector2D robotPosition = rrt->_player->getCoordinates();
     
     // Check if the lookahead path is clear
-    const int lookaheadSteps = 5;
+    float robotSpeed = rrt->_player->getLinearSpeed();
+    const float TIME_HORIZON = 0.3f; // 300 ms
+    int lookaheadSteps = static_cast<int>((robotSpeed * TIME_HORIZON) / (RRT::DEFAULT_STEP_SIZE + 0.001f));
+    lookaheadSteps = std::clamp(lookaheadSteps, 1, 10);
     if (!RRTCollision::isLookaheadClear(rrt, robotPosition, rrt->_currentPathIndex, lookaheadSteps)) {
-        std::cout << "RRT: Obstacle detected in lookahead, replanning...\n";
         rrt->_needsReplanning = true;
         RRTCore::initializeTree(rrt);
         return false;
@@ -90,7 +92,6 @@ bool RRTPathExecution::executePathStep(RRT* rrt, ActuatorClient *actuator) {
 }
 
 bool RRTPathExecution::executePredictiveManeuver(RRT* rrt, ActuatorClient *actuator) {
-    // Verificação de segurança tripla
     if (!rrt || !rrt->_isPerformingPredictiveManeuver || !rrt->_predictiveManeuver) {
         std::cout << "RRT: Error - Invalid predictive maneuver state\n";
         return true; // Return true to exit maneuver mode

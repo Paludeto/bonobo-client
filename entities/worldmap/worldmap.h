@@ -34,8 +34,57 @@ public:
     QList<Player *> getTeam(Color color);
 
     QVector2D &getBallPosition();
+    QVector2D getBallVelocity();
 
     fira_message::sim_to_ref::Environment getEnvironment();
+
+    // Field dimensions (in meters)
+    float getFieldLength() const { return 1.5f; } // 1.5m
+    float getFieldWidth() const { return 1.3f; }  // 1.3m
+    
+    // Field limits
+    float getMinX() const { return -getFieldLength()/2.0f; }
+    float getMaxX() const { return getFieldLength()/2.0f; }
+    float getMinY() const { return -getFieldWidth()/2.0f; }
+    float getMaxY() const { return getFieldWidth()/2.0f; }
+    
+    // Goal dimensions
+    float getGoalWidth() const { return 0.4f; }  // 40cm
+    float getAreaLength() const { return 0.7f; }
+    float getAreaWidth() const { return 0.15f; }
+    
+    // Goal positions for BLUE team (goal at positive X)
+    QVector2D getBlueGoalCenter() const { return QVector2D(getMaxX(), 0.0f); }
+
+    QVector2D getOurRightPost(VSSRef::Color color) const;
+    QVector2D getOurLeftPost(VSSRef::Color color) const;
+    QVector2D getOurGoalCenter(VSSRef::Color color) const;
+    
+    // Goal positions for YELLOW team (goal at negative X)
+    QVector2D getYellowGoalCenter() const { return QVector2D(getMinX(), 0.0f); }
+    
+    // Ball and player properties
+    float getBallRadius() const { return 0.02135f; } // 21.35mm
+    float getRobotRadius() const { return 0.056f; }  
+    
+    // Helper methods for behaviors
+    bool isBallInOurSide(Color ourTeam) const {
+        QVector2D ballPos = _ballPosition;
+        return (ourTeam == Color::BLUE) ? (ballPos.x() > 0) : (ballPos.x() < 0);
+    }
+
+    bool isOurSideLeft(Color ourTeam) const {
+        return (ourTeam == Color::BLUE) ? (false) : (true);
+    }
+    
+    bool isBallInTheirSide(Color ourTeam) const {
+        return !isBallInOurSide(ourTeam);
+    }
+    
+    // Team perception methods
+    bool isTeammateNearerToBall(Player* player) const;
+    bool isPlayerControllingBall(Player* player) const;
+    Player* getPlayerClosestToBall(Color teamColor) const;
 
 private:
 
@@ -47,6 +96,7 @@ private:
     QList<Player *> _yellowTeam;
     VisionClient *_frameUpdater;
     QVector2D _ballPosition;
+    QVector2D _prevBallPosition;
 
 };
 

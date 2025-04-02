@@ -114,9 +114,7 @@ QList<QVector2D> RRTOptimization::simplifyPath(RRT* rrt, const QList<QVector2D>&
             float deviation = Basic::getDistance(point, closestPointOnLine);
             
             // Additionally, check if skipping this point would cause collision
-            bool causesCollision = !RRTCollision::isObstacleFree(rrt, 
-                                      (i > startIndex + 1) ? path[i-1] : startPoint,
-                                      (i < endIndex - 1) ? path[i+1] : endPoint);
+            bool causesCollision = !RRTCollision::isObstacleFree(rrt, (i > startIndex + 1) ? path[i-1] : startPoint, (i < endIndex - 1) ? path[i+1] : endPoint);
             
             // Points that would cause collision have infinite deviation
             if (causesCollision) {

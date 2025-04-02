@@ -9,7 +9,6 @@ PredictiveManeuver::PredictiveManeuver(Player *player, WorldMap *worldMap)
 {
     
     std::cout << "Predictive Maneuver: Starting evasive maneuver" << std::endl;
-    std::cout << "Current ball: " << _worldMap->getBallPosition().x() << ", " << _worldMap->getBallPosition().y() << std::endl;
 }
 
 void PredictiveManeuver::runSkill(ActuatorClient *actuator) {

@@ -94,11 +94,7 @@ void RRT::runSkill(ActuatorClient *actuator) {
                 return;
             }
             std::cout << "RRT: Direct approach to target, attempt " << _stuckCounter << "/3" << std::endl;
-            _player->goTo(const_cast<QVector2D&>(_targetPosition), actuator);
+            _player->goTo(_targetPosition, actuator);
         }
     }
-}
-
-bool isVectorSimilar(const QVector2D& v1, const QVector2D& v2, float threshold) {
-    return (v1 - v2).length() < threshold;
 }

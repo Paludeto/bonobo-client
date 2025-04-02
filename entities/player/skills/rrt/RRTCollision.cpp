@@ -15,7 +15,7 @@ bool RRTCollision::isObstacleFree(RRT* rrt, const QVector2D& fromPoint, const QV
 
     // Check a discrete number of points along the path
     float pathLength = Basic::getDistance(fromPoint, toPoint);
-    int checkSteps = static_cast<int>(pathLength / (RRT::DEFAULT_STEP_SIZE * 0.5f)) + 1;
+    int checkSteps = static_cast<int>(pathLength / (RRT::DEFAULT_STEP_SIZE * 0.2f)) + 1;
 
     for(int i = 0; i <= checkSteps; i++) {
         float t = static_cast<float>(i) / static_cast<float>(checkSteps);
@@ -121,19 +121,8 @@ bool RRTCollision::isLookaheadClear(RRT* rrt, const QVector2D &currentPosition, 
         startPoint = targetPoint;
     }
     
-    // Also check direct paths to future points
-    // to better detect possible shortcuts or blockages
-    for (int i = currentIndex + 1; i <= finalIndex; i++) {
-        if (!isObstacleFree(rrt, currentPosition, rrt->_finalPath[i])) {
-            // If direct path is blocked, it's not necessarily a problem
-            // Just log for debugging
-            std::cout << "RRT: Direct path to waypoint " << i << " is blocked\n";
-        }
-    }
-    
     // Check predicted movements of obstacles
     if (!areObstacleMovementsPredictablyClear(rrt, currentPosition, rrt->_finalPath[currentIndex])) {
-        std::cout << "RRT: Possible future collision detected\n";
         return false;
     }
     

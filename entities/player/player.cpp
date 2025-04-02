@@ -24,7 +24,7 @@ QVector2D Player::getVelocity() {
     return QVector2D(_vX, _vY);
 }
 
-void Player::goTo(QVector2D &targetCoordinates, ActuatorClient *actuator) {
+void Player::goTo(QVector2D targetCoordinates, ActuatorClient *actuator) {
     _skillManager = std::make_unique<GoTo>(this, targetCoordinates);
     _skillManager->runSkill(actuator);
 }
@@ -60,21 +60,14 @@ void Player::pathPlanning(QVector2D& targetPosition, WorldMap *worldMap, float r
         float targetDiff = (currentTarget - targetPosition).length();
         if (targetDiff > 0.02f) {
             needNewRRT = true;
-            std::cout << "RRT target changed, distance: " << targetDiff << std::endl;
         }
     }
     
     // Create a new RRT instance only if needed
     if (needNewRRT) {
-        std::cout << "Player " << _playerId << ": Creating new RRT for target (" 
-                  << targetPosition.x() << ", " << targetPosition.y() 
-                  << ") with stuck counter: " << _rrtStuckCounter << std::endl;
-        
         // Pass the stuck counter as a parameter to the new RRT
         _skillManager = std::make_unique<RRT>(this, targetPosition, worldMap, robotRadius, _rrtStuckCounter);
-    } else {
-        std::cout << "Player " << _playerId << ": Using existing RRT instance" << std::endl;
-    }
+    } 
     
     // Run the skill
     _skillManager->runSkill(actuator);

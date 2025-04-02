@@ -22,11 +22,11 @@ public:
 
     quint8 getPlayerId();
 
-    void goTo(QVector2D &targetCoordinates, ActuatorClient *actuator);
+    void goTo(QVector2D targetCoordinates, ActuatorClient *actuator);
 
     float &getOrientation();
 
-    float getLinearSpeed(); // Implement
+    float getLinearSpeed(); 
 
     QVector2D getVelocity();
 

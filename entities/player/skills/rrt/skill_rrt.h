@@ -38,9 +38,9 @@ public:
     // Constants for RRT parameters 
     static constexpr float DEFAULT_STEP_SIZE = 0.05f;      // Default step size for tree expansion
     static constexpr float DEFAULT_GOAL_BIAS = 0.5f;       // Probability of sampling the goal directly
-    static constexpr int DEFAULT_MAX_ITERATIONS = 5000;    // Maximum iterations for tree growth
-    static constexpr float DEFAULT_FIELD_WIDTH = 1.5f;     // Default field width in meters 
-    static constexpr float DEFAULT_FIELD_HEIGHT = 1.3f;    // Default field height in meters
+    static constexpr int DEFAULT_MAX_ITERATIONS = 2000;    // Maximum iterations for tree growth
+    static constexpr float DEFAULT_FIELD_WIDTH = 1.4f;     // Default field width in meters 
+    static constexpr float DEFAULT_FIELD_HEIGHT = 1.2f;    // Default field height in meters
     static constexpr int MAX_ITERATIONS_PER_FRAME = 60;    // Maximum iterations per frame to spread computation 
     const float MOVEMENT_THRESHOLD = 0.005f;               // 5mm per frame is minimum movement
 
@@ -54,12 +54,6 @@ public:
      */
     RRT(Player *player, QVector2D &targetPosition, WorldMap *worldMap, float robotRadius, int stuckCounter);
 
-    /**
-     * @brief Implementation of the runSkill method from SkillManager
-     * Performs incremental path finding and follows the path if found
-     * 
-     * @param actuator Actuator client for sending commands to the robot
-     */
     void runSkill(ActuatorClient *actuator) override;
 
     /**
@@ -69,11 +63,6 @@ public:
      */
     bool isPathFound() const { return _pathFound; }
 
-    /**
-     * @brief Get the target position
-     * 
-     * @return Target position vector
-     */
     const QVector2D& getTargetPosition() const { return _targetPosition; }
 
     int getStuckCounter() const { return _stuckCounter; }
