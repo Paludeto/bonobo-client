@@ -61,6 +61,8 @@ void RRTOptimization::rewireTree(RRT* rrt, int newNodeIndex) {
     }
 }
 
+
+// Verify later if it's causing trouble in path 
 QList<QVector2D> RRTOptimization::simplifyPath(RRT* rrt, const QList<QVector2D>& path) {
     if (path.size() <= 2) {
         return path; // Already simple enough

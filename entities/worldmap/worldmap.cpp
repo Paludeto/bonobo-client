@@ -104,14 +104,14 @@ QVector2D WorldMap::getOurRightPost(VSSRef::Color color) const {
     if(color == VSSRef::BLUE) {
         return QVector2D(getMaxX(), getGoalWidth()/2.0f);
     } else {
-        return QVector2D(getMinX(), getGoalWidth()/2.0f);
+        return QVector2D(getMinX(), -getGoalWidth()/2.0f);
     }
 }
 
 QVector2D WorldMap::getOurLeftPost(VSSRef::Color color) const {
 
     if(color == VSSRef::BLUE) {
-        return QVector2D(getMaxX(), getGoalWidth()/2.0f);
+        return QVector2D(getMaxX(), -getGoalWidth()/2.0f);
     } else {
         return QVector2D(getMinX(), -getGoalWidth()/2.0f);
     }

@@ -17,9 +17,7 @@ public:
     /**
      * @brief Constructor for AttackWithBallBehavior
      */
-    AttackWithBallBehavior(Player *player, WorldMap *worldMap, 
-                        float ownGoalX, float ownGoalY, 
-                        float opponentGoalX, float opponentGoalY);
+    AttackWithBallBehavior(Player *player, WorldMap *worldMap, float ownGoalX, float ownGoalY, float opponentGoalX, float opponentGoalY);
     
     ~AttackWithBallBehavior() = default;
 
@@ -48,6 +46,7 @@ public:
      */
     void setAvoidDefenseArea(bool avoid) { _avoidDefenseArea = avoid; }
 
+    enum {STATE_ATTACK, POSITIONING_STATE, TAKE_BALL_STATET};
 private:
     // Field positions
     float _ownGoalX;

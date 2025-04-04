@@ -70,7 +70,7 @@ public:
     // Helper methods for behaviors
     bool isBallInOurSide(Color ourTeam) const {
         QVector2D ballPos = _ballPosition;
-        return (ourTeam == Color::BLUE) ? (ballPos.x() > 0) : (ballPos.x() < 0);
+        return (ourTeam == Color::BLUE) ? (ballPos.x() > 0) : (ballPos.x() <= 0);
     }
 
     bool isOurSideLeft(Color ourTeam) const {

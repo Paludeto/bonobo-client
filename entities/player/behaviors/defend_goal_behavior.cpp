@@ -9,8 +9,7 @@ DefendGoalBehavior::DefendGoalBehavior(Player *player, WorldMap *worldMap, float
       _ownGoalX(ownGoalX),
       _ownGoalY(ownGoalY)
 {
-    // Initialize with default parameters
-    setDistGoal();
+
 }
 
 void DefendGoalBehavior::execute(ActuatorClient *actuator) {
@@ -23,9 +22,6 @@ void DefendGoalBehavior::execute(ActuatorClient *actuator) {
             
             // Calculate desired position
             QVector2D desiredPos;
-
-            // desiredPos = getFollowBallPos();
-            std::cout << "To aqui" << std::endl;
             
             if (isBallComingToGoal(POSTSFACTOR)) {
                 float signal = _ownGoalX > 0 ? -1 : 1;
@@ -37,15 +33,21 @@ void DefendGoalBehavior::execute(ActuatorClient *actuator) {
                     desiredPos = QVector2D(desiredPos.x(), signal * fabs(_worldMap->getOurRightPost(_player->getPlayerColor()).y()));
                 }
                  
-                
-                
             } else {
                 // Just positioning based on ball position
                 desiredPos = getFollowBallPos();
             }
 
-            QVector2D targetCoordinates(desiredPos.x(), _worldMap->getMaxY());
-            _player->rotateTo(targetCoordinates, actuator);
+            // QVector2D targetCoord(desiredPos.x(), _worldMap->getMaxY()); 
+            // _player->rotateTo(targetCoord, actuator);
+
+            float desiredAngle = (_ownGoalX > 0) ? M_PI : 0.0f;
+            float currentAngle = _player->getOrientation();
+            float angleDiff = fabs(Basic::smallestAngleDiff(currentAngle, desiredAngle));
+
+            if(angleDiff >= 0.087) {
+                _player->rotateTo(angleDiff, actuator);
+            }
             
             // Get current position
             QVector2D currentPos = _player->getCoordinates();
@@ -162,6 +164,7 @@ bool DefendGoalBehavior::isBallComingToGoal(float postsFactor) {
     QVector2D ballVelocity = _worldMap->getBallVelocity();
 
     if(ballVelocity.length() < BALL_MINVELOCITY) {
+        std::cout << "TO RETORNANDO FALSE";
         return false;
     }
     
@@ -178,26 +181,10 @@ bool DefendGoalBehavior::isBallComingToGoal(float postsFactor) {
 
 // TODO : Correct factors and consts to take ball right
 bool DefendGoalBehavior::isInsideOurArea(const QVector2D& point, float factor) {
-    QVector2D midArea = Basic::calculateItermediatePoint(QVector2D(_ownGoalX, _ownGoalY), QVector2D(0.0, 0.0), _worldMap->getAreaWidth()/2, 0.0);
-
-    // Circular Area
-    if(Basic::getDistance(midArea, point) <= 0.12 * factor) { // 0.12 = VSS arc radius
+    if(point.x() > 0.5 && point.y() < 0.4 && point.y() > -0.4) {
         return true;
     }
-
-    // Retangular Area
-    if(fabs(point.y() < (_worldMap->getAreaWidth()/2.0)) * factor) {
-        if(_ownGoalX > 0.0f) {
-            if(point.x() > (_ownGoalX - (_worldMap->getAreaWidth() * factor))) {
-                return true;
-            }
-        }
-        else {
-            if(point.x() < (_ownGoalX + (_worldMap->getAreaWidth() * factor))) {
-                return true;
-            }
-        }
+    else {
+        return false;
     }
-
-    return false;
 }

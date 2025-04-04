@@ -16,58 +16,8 @@ AttackWithBallBehavior::AttackWithBallBehavior(Player *player, WorldMap *worldMa
 }
 
 void AttackWithBallBehavior::execute(ActuatorClient *actuator) {
-    // Get positions
-    QVector2D ballPos = _worldMap->getBallPosition();
-    QVector2D playerPos = _player->getCoordinates();
-    QVector2D opponentGoal(_opponentGoalX, _opponentGoalY);
-    
-    // Check if we have the ball
-    bool haveBall = hasBallPossession();
-    if (haveBall) {
-        _hadBallPossession = true;
-        
-        // Calculate angle to opponent goal
-        float angleToGoal = Basic::getAngle(playerPos, opponentGoal);
-        
-        // Get current angle
-        float currentAngle = _player->getOrientation();
-        
-        // Calculate angle difference
-        float angleDiff = Basic::smallestAngleDiff(currentAngle, angleToGoal);
-        
-        // If angle is close enough, drive forward, otherwise turn
-        if (std::abs(angleDiff) < 0.3f) {
-            // Aligned well enough, drive forward
-            _player->pathPlanning(opponentGoal, _worldMap, _worldMap->getRobotRadius(), actuator);
-        } else {
-            // Need to turn
-            if (angleDiff > 0) {
-                actuator->sendCommand(_player->getPlayerId(), 60.0f, 20.0f); // Turn right
-            } else {
-                actuator->sendCommand(_player->getPlayerId(), 20.0f, 60.0f); // Turn left
-            }
-        }
-    } 
-    else {
-        // Don't have the ball, go get it
-        float distToBall = Basic::getDistance(playerPos, ballPos);
-        
-        // Calculate position behind ball relative to goal
-        QVector2D ballToGoal = opponentGoal - ballPos;
-        if (ballToGoal.length() > 0.01f) {
-            ballToGoal.normalize();
-            
-            // Position behind ball to approach from proper angle
-            QVector2D targetPos = ballPos - ballToGoal * 0.08f;
-            
-            // Use path planning to reach the position
-            _player->pathPlanning(targetPos, _worldMap, _worldMap->getRobotRadius(), actuator);
-        }
-        else {
-            // Just go to the ball if calculation fails
-            _player->pathPlanning(ballPos, _worldMap, _worldMap->getRobotRadius(), actuator);
-        }
-    }
+
+    // implement
 }
 
 bool AttackWithBallBehavior::shouldActivate() {

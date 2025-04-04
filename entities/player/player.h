@@ -30,7 +30,7 @@ public:
 
     QVector2D getVelocity();
 
-    void rotateTo(QVector2D &targetPosition, ActuatorClient *actuator);
+    void rotateTo(float angle, ActuatorClient *actuator);
 
     QVector2D getCoordinates();
 

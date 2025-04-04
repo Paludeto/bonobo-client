@@ -1,9 +1,9 @@
 #include "skill_rotateTo.h"
 #include "player/player.h"
 
-void RotateTo::rotateTo(QVector2D &targetCoordinates, ActuatorClient *actuator) {
+void RotateTo::rotateTo(float angle, ActuatorClient *actuator) {
     static float lastError = 0;
-    float targetAngle = Basic::getAngle(_player->getCoordinates(), targetCoordinates);
+    float targetAngle = angle;
     float robotAngle = _player->getOrientation();
 
     // Check if reversing is optimal
@@ -14,6 +14,11 @@ void RotateTo::rotateTo(QVector2D &targetCoordinates, ActuatorClient *actuator) 
 
     // Calculate angle error and motor speed using proportional and derivative control (PD)
     float angleError = Basic::smallestAngleDiff(robotAngle, targetAngle);
+    if (fabs(angleError) < 0.087f) {
+        actuator->sendCommand(_player->getPlayerId(), 0.0f, 0.0f);
+        lastError = 0;  
+        return;
+    }
     float motorSpeed = (KP * angleError) + (KD * (angleError - lastError));
     lastError = angleError;
 
@@ -27,5 +32,5 @@ void RotateTo::rotateTo(QVector2D &targetCoordinates, ActuatorClient *actuator) 
 
 
 void RotateTo::runSkill(ActuatorClient *actuator) {
-    rotateTo(_targetCoordinates, actuator);
+    rotateTo(_angle, actuator);
 }

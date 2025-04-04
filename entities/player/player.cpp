@@ -29,8 +29,8 @@ void Player::goTo(QVector2D targetCoordinates, ActuatorClient *actuator) {
     _skillManager->runSkill(actuator);
 }
 
-void Player::rotateTo(QVector2D &targetCoordinates, ActuatorClient *actuator) {
-    _skillManager = std::make_unique<RotateTo>(this, targetCoordinates);
+void Player::rotateTo(float angle, ActuatorClient *actuator) {
+    _skillManager = std::make_unique<RotateTo>(this, angle);
     _skillManager->runSkill(actuator);
 }
 

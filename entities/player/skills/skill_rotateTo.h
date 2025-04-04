@@ -6,20 +6,20 @@
 class RotateTo : public SkillManager 
 {
 
-static constexpr float KP = 20.0f; // How to consolidate all constants into a single header file?
+static constexpr float KP = 15.0f; // How to consolidate all constants into a single header file?
 static constexpr float KD = 2.5f;
 static constexpr float BASE_SPEED = 30.0f;
 
 public:
     
-    explicit RotateTo(Player *player, QVector2D &targetCoordinates) : SkillManager(player), _targetCoordinates(targetCoordinates) 
+    explicit RotateTo(Player *player, float angle) : SkillManager(player), _angle(angle) 
     {}
 
     void runSkill(ActuatorClient *actuator) override;
 
-    void rotateTo(QVector2D &targetCoordinates, ActuatorClient *actuator);
+    void rotateTo(float angle, ActuatorClient *actuator);
 
-    QVector2D &_targetCoordinates;
+    float _angle;
 };
 
 #endif

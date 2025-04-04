@@ -51,13 +51,6 @@ public:
      */
     int getPriority() const override;
 
-    /**
-     * @brief Set the distance from goal line for positioning
-     * 
-     * @param distGoal Distance from goal line (in meters)
-     */
-    void setDistGoal(float distGoal = 0.01f) { _distGoal = distGoal; }
-
 private:
     // States
     enum State {
@@ -71,9 +64,6 @@ private:
     // Goal position
     float _ownGoalX;
     float _ownGoalY;
-    
-    // Parameters
-    float _distGoal;
 
     /**
      * @brief Calculate the position for following the ball
@@ -99,9 +89,9 @@ private:
     bool isInsideOurArea(const QVector2D& point, float factor);
 
     // Constants
-    static constexpr float BALL_MINVELOCITY = 0.05f;
-    static constexpr float TAKEOUT_FACTOR_IN = 1.15f; 
-    static constexpr float TAKEOUT_FACTOR_OUT = 1.30f;
+    static constexpr float BALL_MINVELOCITY = 0.5f;
+    static constexpr float TAKEOUT_FACTOR_IN = 0.7f; 
+    static constexpr float TAKEOUT_FACTOR_OUT = 0.8f;
     static constexpr float POSTSFACTOR = 1.75f;
 };
 

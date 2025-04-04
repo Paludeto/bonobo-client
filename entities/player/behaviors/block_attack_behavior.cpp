@@ -15,19 +15,7 @@ BlockAttackBehavior::BlockAttackBehavior(Player *player, WorldMap *worldMap,
 }
 
 void BlockAttackBehavior::execute(ActuatorClient *actuator) {
-    // Get positions
-    QVector2D ballPos = _worldMap->getBallPosition();
-    QVector2D playerPos = _player->getCoordinates();
-    QVector2D ourGoal(_ownGoalX, _ownGoalY);
-    
-    // Update last ball position
-    _lastBallPos = ballPos;
-    
-    // Calculate intercept position
-    QVector2D targetPos = calculateInterceptPosition();
-    
-    // Use path planning to reach the position
-    _player->pathPlanning(targetPos, _worldMap, _worldMap->getRobotRadius(), actuator);
+   // implement
 }
 
 bool BlockAttackBehavior::shouldActivate() {
