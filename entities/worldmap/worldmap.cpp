@@ -166,8 +166,8 @@ bool WorldMap::isPlayerControllingBall(Player* player) const {
     // Calculate distance
     float distance = Basic::getDistance(playerPos, ballPos);
     
-    // Ball control threshold (robot radius + ball radius + margin)
-    float controlThreshold = getRobotRadius() + getBallRadius() + 0.01f; // 1cm extra margin
+    // Ball control threshold (robot radius
+    float controlThreshold = getRobotRadius();
     
     return distance <= controlThreshold;
 }

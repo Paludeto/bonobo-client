@@ -64,7 +64,6 @@ public:
     QVector2D getYellowGoalCenter() const { return QVector2D(getMinX(), 0.0f); }
     
     // Ball and player properties
-    float getBallRadius() const { return 0.02135f; } // 21.35mm
     float getRobotRadius() const { return 0.056f; }  
     
     // Helper methods for behaviors

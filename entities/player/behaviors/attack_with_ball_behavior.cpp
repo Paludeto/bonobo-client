@@ -11,13 +11,43 @@ AttackWithBallBehavior::AttackWithBallBehavior(Player *player, WorldMap *worldMa
       _opponentGoalX(opponentGoalX),
       _opponentGoalY(opponentGoalY),
       _avoidDefenseArea(false),
-      _hadBallPossession(false)
+      _hadBallPossession(false),
+      _state(STATE_ATTACK)
 {
 }
 
 void AttackWithBallBehavior::execute(ActuatorClient *actuator) {
+    switch (_state) {
+        case STATE_ATTACK: {
+            QVector2D opponentGoal(_opponentGoalX, _opponentGoalY);
+            QVector2D ballPos = _worldMap->getBallPosition();
+            
+            if(hasBallPossession()) {
 
-    // implement
+                _player->pathPlanning(opponentGoal, _worldMap, _worldMap->getRobotRadius(), actuator);
+                
+            } else {
+                _state = TAKE_BALL_STATE;
+            }
+            
+        } break;
+
+        case TAKE_BALL_STATE: {
+            QVector2D ballPos = _worldMap->getBallPosition();
+            QVector2D opponentGoal(_opponentGoalX, _opponentGoalY);
+
+            QVector2D ballToTarget = opponentGoal - ballPos;
+            ballToTarget.normalize();
+
+            QVector2D behindBallPos = ballPos - ballToTarget * (_worldMap->getRobotRadius() + 0.01f);
+
+            _player->pathPlanning(behindBallPos, _worldMap, _worldMap->getRobotRadius(), actuator);
+            
+            if(hasBallPossession()) {
+                _state = STATE_ATTACK;
+            }
+        } break;
+    }
 }
 
 bool AttackWithBallBehavior::shouldActivate() {
@@ -34,7 +64,7 @@ bool AttackWithBallBehavior::shouldActivate() {
     Player* closestPlayer = _worldMap->getPlayerClosestToBall(ourTeam);
     bool isClosest = (closestPlayer == _player);
     
-    return haveBall || (isClosest && !_worldMap->isBallInOurSide(ourTeam));
+    return true;
 }
 
 bool AttackWithBallBehavior::shouldKeepActive() {

@@ -28,7 +28,6 @@ void DefenderRole::initializeBehaviors() {
     auto blockAttackBehavior = std::make_unique<BlockAttackBehavior>(_player, _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY);
     
     // Add behaviors to the role - order matters for priority when multiple behaviors could activate
-    _behaviors.push_back(std::move(attackWithBallBehavior));  // High priority when we have the ball
     _behaviors.push_back(std::move(blockAttackBehavior));     // Default defensive behavior
     
     // Note: The above priority means the defender will switch to attack mode when they
