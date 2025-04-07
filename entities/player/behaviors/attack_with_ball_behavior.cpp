@@ -139,6 +139,8 @@ QVector2D AttackWithBallBehavior::calculateBestPosition() {
     QList<Player*> theirTeam = _worldMap->getTeam(theirColor);
 
     for(Player* player : ourTeam) {
+        if(_player->getPlayerId() == player->getPlayerId()) continue;
+        if(player->getPlayerId() == 0) continue;
         points.push_back(player->getCoordinates());
     }
 

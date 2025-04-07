@@ -39,8 +39,8 @@ public:
     static constexpr float DEFAULT_STEP_SIZE = 0.05f;      // Default step size for tree expansion
     static constexpr float DEFAULT_GOAL_BIAS = 0.5f;       // Probability of sampling the goal directly
     static constexpr int DEFAULT_MAX_ITERATIONS = 2000;    // Maximum iterations for tree growth
-    static constexpr float DEFAULT_FIELD_WIDTH = 1.4f;     // Default field width in meters 
-    static constexpr float DEFAULT_FIELD_HEIGHT = 1.2f;    // Default field height in meters
+    static constexpr float DEFAULT_FIELD_WIDTH = 1.5f;     // Default field width in meters 
+    static constexpr float DEFAULT_FIELD_HEIGHT = 1.3f;    // Default field height in meters
     static constexpr int MAX_ITERATIONS_PER_FRAME = 60;    // Maximum iterations per frame to spread computation 
     const float MOVEMENT_THRESHOLD = 0.005f;               // 5mm per frame is minimum movement
 
