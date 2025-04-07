@@ -31,7 +31,7 @@ void DefensivePlaybook::initializeRoles() {
     assignRole(0, std::make_unique<GoalkeeperRole>(ourTeam[0], _worldMap, _ownGoalX, _ownGoalY));
     
     // Assign defender (player 1)
-    assignRole(1, std::make_unique<DefenderRole>(ourTeam[1], _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY));
+    assignRole(1, std::make_unique<AttackerRole>(ourTeam[1], _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY));
     
     // Assign attacker (player 2)
     assignRole(2, std::make_unique<AttackerRole>(ourTeam[2], _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY));

@@ -22,9 +22,6 @@ void AttackerRole::initializeBehaviors() {
     // Add attack with ball behavior - high priority when we have the ball
     auto attackWithBallBehavior = std::make_unique<AttackWithBallBehavior>(_player, _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY);
     
-    // Configure the attack behavior
-    attackWithBallBehavior->setAvoidDefenseArea(true);
-    
     // Add block attack behavior - used when opponent has the ball
     auto blockAttackBehavior = std::make_unique<BlockAttackBehavior>(_player, _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY);
     

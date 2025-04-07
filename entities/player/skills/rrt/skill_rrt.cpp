@@ -44,8 +44,6 @@ RRT::RRT(Player *player, QVector2D &targetPosition, WorldMap *worldMap, float ro
         globalStuckCounters[playerId] = stuckCounter;
     }
     
-    std::cout << "RRT: Initialized with global stuck counter for player " 
-              << playerId << ": " << _stuckCounter << std::endl;
 }
 
 void RRT::runSkill(ActuatorClient *actuator) {

@@ -5,6 +5,7 @@
 #include "player/player.h"
 #include "vssref_common.pb.h"
 #include <QVector2D>
+#include <vector>
 
 #define MAX_PLAYERS 3
 

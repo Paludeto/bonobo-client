@@ -35,7 +35,7 @@ void OffensivePlaybook::initializeRoles() {
     // In offensive playbook, we have one defender and one attacker
     
     // Assign defender (player 1) - will still move up on offense
-    assignRole(1, std::make_unique<DefenderRole>(ourTeam[1], _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY));
+    assignRole(1, std::make_unique<AttackerRole>(ourTeam[1], _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY));
     
     // Assign attacker (player 2)
     assignRole(2, std::make_unique<AttackerRole>(ourTeam[2], _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY));

@@ -181,6 +181,10 @@ Player* WorldMap::getPlayerClosestToBall(Color teamColor) const {
     float minDistance = std::numeric_limits<float>::max();
     
     for (Player* player : team) {
+        if(player->getPlayerId() == 0) {
+            continue;
+        }
+
         float distance = Basic::getDistance(player->getCoordinates(), _ballPosition);
         
         if (distance < minDistance) {

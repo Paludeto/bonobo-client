@@ -41,11 +41,6 @@ public:
      */
     int getPriority() const override;
 
-    /**
-     * @brief Set whether to avoid defense area
-     */
-    void setAvoidDefenseArea(bool avoid) { _avoidDefenseArea = avoid; }
-
     enum State {STATE_ATTACK, POSITIONING_STATE, TAKE_BALL_STATE};
 private:
     // Field positions
@@ -54,9 +49,6 @@ private:
     float _opponentGoalX;
     float _opponentGoalY;
     State _state;
-    
-    // Settings
-    bool _avoidDefenseArea;
     
     // Ball possession tracking
     bool _hadBallPossession;
@@ -68,6 +60,7 @@ private:
      * @brief Check if player has the ball
      */
     bool hasBallPossession() const;
+    QVector2D calculateBestPosition();
 };
 
 #endif // ATTACK_WITH_BALL_BEHAVIOR_H
