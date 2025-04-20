@@ -18,8 +18,8 @@ DefenderRole::DefenderRole(Player *player, WorldMap *worldMap, float ownGoalX, f
 }
 
 void DefenderRole::initializeBehaviors() {    
-    // Add attack with ball behavior - activates when defender has the ball
-    auto attackWithBallBehavior = std::make_unique<AttackWithBallBehavior>(_player, _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY);
+    // // Add attack with ball behavior - activates when defender has the ball
+    // auto attackWithBallBehavior = std::make_unique<AttackWithBallBehavior>(_player, _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY);
     
     // Add block attack behavior - primary defensive behavior
     auto blockAttackBehavior = std::make_unique<BlockAttackBehavior>(_player, _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY);

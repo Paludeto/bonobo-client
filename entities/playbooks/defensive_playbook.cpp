@@ -11,7 +11,7 @@ DefensivePlaybook::DefensivePlaybook(WorldMap *worldMap, VSSRef::Color teamColor
 
 bool DefensivePlaybook::shouldActivate() {
     // Activate when ball is in our half or opponent has the ball
-    return _worldMap->isBallInOurSide(_teamColor) || isOpponentWithBall();
+    return true;
 }
 
 int DefensivePlaybook::getPriority() const {
@@ -31,31 +31,12 @@ void DefensivePlaybook::initializeRoles() {
     assignRole(0, std::make_unique<GoalkeeperRole>(ourTeam[0], _worldMap, _ownGoalX, _ownGoalY));
     
     // Assign defender (player 1)
-    assignRole(1, std::make_unique<AttackerRole>(ourTeam[1], _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY));
+    assignRole(1, std::make_unique<DefenderRole>(ourTeam[1], _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY));
     
     // Assign attacker (player 2)
-    assignRole(2, std::make_unique<AttackerRole>(ourTeam[2], _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY));
+    assignRole(2, std::make_unique<DefenderRole>(ourTeam[2], _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY));
 }
 
 void DefensivePlaybook::updatePlaybookState() {
     // Implement logic to defense playbook with players roles
-}
-
-bool DefensivePlaybook::isOpponentWithBall() const {
-    // Get the ball position
-    QVector2D ballPosition = _worldMap->getBallPosition();
-    
-    // Get the opponent team
-    VSSRef::Color opponentColor = (_teamColor == VSSRef::Color::BLUE) ? VSSRef::Color::YELLOW : VSSRef::Color::BLUE;
-    QList<Player*> opponentTeam = _worldMap->getTeam(opponentColor);
-    
-    // Check if any opponent is close to the ball
-    for (Player* opponent : opponentTeam) {
-        float distance = Basic::getDistance(opponent->getCoordinates(), ballPosition);
-        if (distance < BALL_CONTROL_THRESHOLD) {
-            return true;
-        }
-    }
-    
-    return false;
 }

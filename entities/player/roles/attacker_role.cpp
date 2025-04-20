@@ -22,12 +22,8 @@ void AttackerRole::initializeBehaviors() {
     // Add attack with ball behavior - high priority when we have the ball
     auto attackWithBallBehavior = std::make_unique<AttackWithBallBehavior>(_player, _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY);
     
-    // Add block attack behavior - used when opponent has the ball
-    auto blockAttackBehavior = std::make_unique<BlockAttackBehavior>(_player, _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY);
-    
     // Add behaviors to the role - order matters for priority when multiple behaviors could activate
     _behaviors.push_back(std::move(attackWithBallBehavior));  // Highest priority
-    _behaviors.push_back(std::move(blockAttackBehavior));     // Secondary priority
 }
 
 void AttackerRole::updateRoleState() {

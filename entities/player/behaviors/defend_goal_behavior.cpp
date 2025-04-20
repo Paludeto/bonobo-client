@@ -38,9 +38,6 @@ void DefendGoalBehavior::execute(ActuatorClient *actuator) {
                 desiredPos = getFollowBallPos();
             }
 
-            // QVector2D targetCoord(desiredPos.x(), _worldMap->getMaxY()); 
-            // _player->rotateTo(targetCoord, actuator);
-
             float desiredAngle = (_ownGoalX > 0) ? M_PI : 0.0f;
             float currentAngle = _player->getOrientation();
             float angleDiff = fabs(Basic::smallestAngleDiff(currentAngle, desiredAngle));
@@ -117,7 +114,7 @@ bool DefendGoalBehavior::shouldActivate() {
     // Or if ball is coming to our goal
     bool ballComingToGoal = isBallComingToGoal(POSTSFACTOR);
     
-    return ballInOurHalf || ballComingToGoal;
+    return true;
 }
 
 bool DefendGoalBehavior::shouldKeepActive() {
@@ -141,7 +138,7 @@ QVector2D DefendGoalBehavior::getFollowBallPos() {
 
     float posY;
     if(_worldMap->isBallInTheirSide(_player->getPlayerColor())) {
-        posY = 0.0;
+        posY = 0;
     } else if((_worldMap->isBallInOurSide(_player->getPlayerColor()) && ballPos.x() <= _worldMap->getMaxX() * 3/4) || (_worldMap->isBallInOurSide(_player->getPlayerColor()) && ballPos.x() >= _worldMap->getMinX() * 3/4)) {
         posY = (fabs(_worldMap->getOurRightPost(_player->getPlayerColor()).y() / fabs(_worldMap->getMaxY())) * ballPos.y());
     } else {

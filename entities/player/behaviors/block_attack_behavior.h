@@ -44,12 +44,15 @@ public:
      */
     int getPriority() const override;
 
+    enum State {POSITIONING_STATE, TAKE_BALL_STATE};
+
 private:
     // Field positions
     float _ownGoalX;
     float _ownGoalY;
     float _opponentGoalX;
     float _opponentGoalY;
+    State _state;
     
     // Last ball position
     QVector2D _lastBallPos;
@@ -71,6 +74,8 @@ private:
      * @brief Calculate position to intercept ball
      */
     QVector2D calculateInterceptPosition() const;
+
+    QVector2D calculateBestPosition();
 };
 
 #endif // BLOCK_ATTACK_BEHAVIOR_H

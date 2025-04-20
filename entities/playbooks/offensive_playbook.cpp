@@ -11,7 +11,7 @@ OffensivePlaybook::OffensivePlaybook(WorldMap *worldMap, VSSRef::Color teamColor
 
 bool OffensivePlaybook::shouldActivate() {
     // Activate when ball is in opponent's half or our team has the ball
-    return _worldMap->isBallInTheirSide(_teamColor) || isTeamWithBall();
+    return true;
 }
 
 int OffensivePlaybook::getPriority() const {
@@ -43,22 +43,4 @@ void OffensivePlaybook::initializeRoles() {
 
 void OffensivePlaybook::updatePlaybookState() {
     // Implement logic to attack playbook with players roles
-}
-
-bool OffensivePlaybook::isTeamWithBall() const { // We can implement this function in WorldMap to all playbooks use
-    // Get the ball position
-    QVector2D ballPosition = _worldMap->getBallPosition();
-    
-    // Get our team
-    QList<Player*> ourTeam = _worldMap->getTeam(_teamColor);
-    
-    // Check if any of our players is close to the ball
-    for (Player* player : ourTeam) {
-        float distance = Basic::getDistance(player->getCoordinates(), ballPosition);
-        if (distance < BALL_CONTROL_THRESHOLD) {
-            return true;
-        }
-    }
-    
-    return false;
 }

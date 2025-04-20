@@ -60,52 +60,11 @@ void Strategy::initializePlaybooks() {
 }
 
 Playbook* Strategy::selectPlaybook() {
-    // First, check if we're in a special game state
-    if (_gameState != NORMAL_PLAY) {
-        // In a more advanced implementation, we would select specialized playbooks
-        // for kickoff, free kick, penalty, etc.
-        
-        // For now, just use the defensive playbook for special situations
-        for (auto& playbook : _playbooks) {
-            if (dynamic_cast<DefensivePlaybook*>(playbook.get())) {
-                return playbook.get();
-            }
-        }
+    if(_worldMap->isBallInTheirSide(_teamColor)) {
+        return _playbooks[1].get();
+    } else {
+        return _playbooks[0].get();
     }
-    
-    // For normal play, find the highest priority playbook that should be activated
-    Playbook* selectedPlaybook = nullptr;
-    int highestPriority = -1;
-    
-    // Iterate through all playbooks in order of priority
-    for (auto& playbook : _playbooks) {
-        // Skip currently active playbook for hysteresis (avoid rapid switching)
-        if (playbook.get() == _activePlaybook) {
-            // Keep using current playbook if it still should be active
-            if (_activePlaybook->shouldActivate()) {
-                return _activePlaybook;
-            }
-            continue;
-        }
-        
-        // Check if this playbook should be activated and has higher priority
-        if (playbook->shouldActivate() && playbook->getPriority() > highestPriority) {
-            highestPriority = playbook->getPriority();
-            selectedPlaybook = playbook.get();
-        }
-    }
-    
-    // If no playbook selected, fallback to the defensive playbook
-    if (!selectedPlaybook) {
-        for (auto& playbook : _playbooks) {
-            if (dynamic_cast<DefensivePlaybook*>(playbook.get())) {
-                selectedPlaybook = playbook.get();
-                break;
-            }
-        }
-    }
-    
-    return selectedPlaybook;
 }
 
 void Strategy::updateGameState() {

@@ -209,5 +209,8 @@ QVector2D Basic::getCircumcenter(std::vector<QVector2D> t) {
     float ux = (ax2ay2 * (by - cy) + bx2by2 * (cy - ay) + cx2cy2 * (ay - by)) / d;
     float uy = (ax2ay2 * (cx - bx) + bx2by2 * (ax - cx) + cx2cy2 * (bx - ax)) / d;
 
+    ux = std::clamp(ux, -0.60f, 0.60f);
+    uy = std::clamp(uy, -0.50f, 0.50f);
+
     return QVector2D(ux, uy);
 }

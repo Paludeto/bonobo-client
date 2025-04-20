@@ -9,35 +9,51 @@ BlockAttackBehavior::BlockAttackBehavior(Player *player, WorldMap *worldMap,
       _ownGoalX(ownGoalX),
       _ownGoalY(ownGoalY),
       _opponentGoalX(opponentGoalX),
-      _opponentGoalY(opponentGoalY)
+      _opponentGoalY(opponentGoalY),
+      _state(TAKE_BALL_STATE)
 {
     _lastBallPos = _worldMap->getBallPosition();
 }
 
 void BlockAttackBehavior::execute(ActuatorClient *actuator) {
-   // implement
+   switch(_state) {
+        case TAKE_BALL_STATE: {
+            QVector2D ballPos = _worldMap->getBallPosition();
+            
+            Player *closer = _worldMap->getPlayerClosestToBall(_player->getPlayerColor());
+
+            if(closer == _player) {
+                QVector2D ballPos = _worldMap->getBallPosition();
+
+                QVector2D desiredPos = calculateInterceptPosition();
+                _player->pathPlanning(desiredPos, _worldMap, _worldMap->getRobotRadius(), actuator);
+            } else {
+                _state = POSITIONING_STATE;
+            }
+        }break;
+
+        case POSITIONING_STATE: {
+            QVector2D opponentGoal(_opponentGoalX, _opponentGoalY);
+            QVector2D ballPos = _worldMap->getBallPosition();
+            
+            QVector2D desiredPos = calculateBestPosition();
+
+            _player->pathPlanning(desiredPos, _worldMap, _worldMap->getRobotRadius(), actuator);
+
+            Player *player = _worldMap->getPlayerClosestToBall(_player->getPlayerColor());
+
+            if(player == _player) {
+                _state = TAKE_BALL_STATE;
+            } else {
+                _state = POSITIONING_STATE;
+            }
+        }break;
+
+   }
 }
 
 bool BlockAttackBehavior::shouldActivate() {
-    // Get team colors
-    VSSRef::Color ourTeam = _player->getPlayerColor();
-    
-    // Check if ball is in our half
-    bool ballInOurHalf = _worldMap->isBallInOurSide(ourTeam);
-    
-    // Check if opponent has the ball
-    bool opponentHasBall = isOpponentWithBall();
-    
-    // Check if we're closest to ball
-    bool isClosest = isClosestToBall();
-    
-    // Don't activate for goalkeeper
-    if (_player->getPlayerId() == 0) {
-        return false;
-    }
-    
-    // Activate if ball is in our half or opponent has the ball
-    return ballInOurHalf || opponentHasBall;
+    return true;
 }
 
 bool BlockAttackBehavior::shouldKeepActive() {
@@ -110,15 +126,56 @@ QVector2D BlockAttackBehavior::calculateInterceptPosition() const {
             
             QVector2D interceptPos = ballPos - goalToBall * (distanceToGoal * positionFactor);
             
-            // If ball is very close to our goal, go directly to it
-            if (distanceToGoal < 0.3f) {
-                return ballPos;
-            }
-            
             return interceptPos;
         }
     }
     
     // When ball is in opponent half or calculation fails, position directly at ball
     return ballPos;
+}
+
+QVector2D BlockAttackBehavior::calculateBestPosition() {
+    std::vector<QVector2D> points;
+    QList<Player*> ourTeam = _worldMap->getTeam(_player->getPlayerColor());
+    VSSRef::Color theirColor = (_player->getPlayerColor() == VSSRef::BLUE) ? VSSRef::YELLOW : VSSRef::BLUE; 
+
+    QList<Player*> theirTeam = _worldMap->getTeam(theirColor);
+
+    for(Player* player : ourTeam) {
+        if(_player->getPlayerId() == player->getPlayerId()) continue;
+        if(player->getPlayerId() == 0) continue;
+        points.push_back(player->getCoordinates());
+    }
+
+    for(Player* player : theirTeam) {
+        points.push_back(player->getCoordinates());
+    }
+
+    std::vector<std::vector<QVector2D>> triangles = Basic::triangularization(points);
+    
+    float maxRadius = -1;
+    QVector2D bestPoint;
+
+    for(std::vector<QVector2D> t : triangles) {
+        std::cout << "Ado" << std::endl;
+        QVector2D center = Basic::getCircumcenter(t);
+        
+        std::cout << center.x() << center.y() << std::endl;
+        
+        float minDist = std::numeric_limits<float>::max();
+
+        for(const QVector2D p : points) {
+            float dx = p.x() - center.x();
+            float dy = p.y() - center.y();
+            float dist = std::sqrt(dx*dx + dy*dy);
+            minDist = std::min(minDist, dist);
+        }
+
+        if(minDist > maxRadius) {
+            maxRadius = minDist;
+            bestPoint = center;
+        }
+    }
+
+    return bestPoint;
 }
