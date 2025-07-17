@@ -30,12 +30,17 @@ public:
 
     QVector2D getVelocity();
 
+    float getAngularVelocity() const;
+
+
     void rotateTo(float angle, ActuatorClient *actuator);
 
     QVector2D getCoordinates();
 
     void pathPlanning(QVector2D& targetPosition, WorldMap *worldMap, float robotRadius, ActuatorClient *actuator);
-    
+
+    void univector(QVector2D& targetPosition, WorldMap *worldMap, float robotRadius, ActuatorClient *actuator);
+
 protected:
 
     friend class WorldMap;
@@ -49,6 +54,10 @@ protected:
     float _orientation;
     QVector2D _coordinates;
     int _rrtStuckCounter = 0;
+    float _angularVelocity = 0.0f;
+    float _lastOrientation = 0.0f;
+    qint64 _lastUpdateTime = 0;  // em milissegundos
+
 
 };
 

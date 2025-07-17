@@ -17,53 +17,8 @@ void DefendGoalBehavior::execute(ActuatorClient *actuator) {
     switch (_state) {
         default:
         case STATE_GOTO: {
-            // Implement a stuck detection in wall, if stuck call an skill antistuck. Need implement skill antistuck, can delete, or modify skill escape
-            // Need to remove from RRT stuck detection, better put this into behavior.  
-            
-            // Calculate desired position
-            QVector2D desiredPos;
-            
-            if (isBallComingToGoal(POSTSFACTOR)) {
-                float signal = _ownGoalX > 0 ? -1 : 1;
-                desiredPos = Basic::getBallImpactPosition(std::atan2(_worldMap->getBallVelocity().y(), _worldMap->getBallVelocity().x()), _ownGoalX + signal * (0.01 + 2 * _worldMap->getRobotRadius()), _worldMap, _player->getPlayerColor());
-                desiredPos = QVector2D(desiredPos.x() - signal * _worldMap->getRobotRadius(), desiredPos.y()); 
-                
-                if(fabs(desiredPos.y()) > fabs(_worldMap->getOurRightPost(_player->getPlayerColor()).y())) {
-                    float signal = desiredPos.y() / fabs(desiredPos.y());
-                    desiredPos = QVector2D(desiredPos.x(), signal * fabs(_worldMap->getOurRightPost(_player->getPlayerColor()).y()));
-                }
-                 
-            } else {
-                // Just positioning based on ball position
-                desiredPos = getFollowBallPos();
-            }
 
-            float desiredAngle = (_ownGoalX > 0) ? M_PI : 0.0f;
-            float currentAngle = _player->getOrientation();
-            float angleDiff = fabs(Basic::smallestAngleDiff(currentAngle, desiredAngle));
 
-            if(angleDiff >= 0.087) {
-                _player->rotateTo(angleDiff, actuator);
-            }
-            
-            // Get current position
-            QVector2D currentPos = _player->getCoordinates();
-            
-            // Only move if we're not already at the desired position (reduces jitter)
-            float distanceToTarget = Basic::getDistance(currentPos, desiredPos);
-            if (distanceToTarget > 0.01f) { // Only move if more than 1cm away from target
-                // Move to desired position
-                _player->goTo(desiredPos, actuator);
-            } 
-            
-            // Check if we should switch to takeout state
-            QVector2D ballPos = _worldMap->getBallPosition();
-            QVector2D playerPos = _player->getCoordinates();
-            
-            // 
-            if (isInsideOurArea(ballPos, TAKEOUT_FACTOR_IN) && isInsideOurArea(playerPos, TAKEOUT_FACTOR_IN)) {
-                _state = STATE_SHORTTAKEOUT;
-            }
         } break;
         
         case STATE_SHORTTAKEOUT: {
@@ -80,7 +35,6 @@ void DefendGoalBehavior::execute(ActuatorClient *actuator) {
             robotPos = _player->getCoordinates();
 
             float distanceToBall = Basic::getDistance(robotPos, ballPos);
-            std::cout << distanceToBall << std::endl;
 
             if(distanceToBall < 0.08) {
                 actuator->sendCommand(_player->getPlayerId(), 100, -100);
@@ -161,7 +115,6 @@ bool DefendGoalBehavior::isBallComingToGoal(float postsFactor) {
     QVector2D ballVelocity = _worldMap->getBallVelocity();
 
     if(ballVelocity.length() < BALL_MINVELOCITY) {
-        std::cout << "TO RETORNANDO FALSE";
         return false;
     }
     

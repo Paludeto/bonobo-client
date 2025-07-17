@@ -199,7 +199,6 @@ QVector2D Basic::getCircumcenter(std::vector<QVector2D> t) {
     float cx = C.x(), cy = C.y();
 
     float d = 2 * (ax*(by - cy) + bx*(cy - ay) + cx*(ay - by));
-    std::cout << "Teste" << std::endl;
     if (std::abs(d) < 1e-6) return QVector2D(0, 0); 
 
     float ax2ay2 = ax*ax + ay*ay;

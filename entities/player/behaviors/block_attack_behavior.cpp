@@ -16,40 +16,29 @@ BlockAttackBehavior::BlockAttackBehavior(Player *player, WorldMap *worldMap,
 }
 
 void BlockAttackBehavior::execute(ActuatorClient *actuator) {
-   switch(_state) {
+    switch(_state) {
         case TAKE_BALL_STATE: {
             QVector2D ballPos = _worldMap->getBallPosition();
-            
             Player *closer = _worldMap->getPlayerClosestToBall(_player->getPlayerColor());
 
-            if(closer == _player) {
-                QVector2D ballPos = _worldMap->getBallPosition();
-
+            if (closer == _player) {
                 QVector2D desiredPos = calculateInterceptPosition();
-                _player->pathPlanning(desiredPos, _worldMap, _worldMap->getRobotRadius(), actuator);
+                _player->univector(desiredPos, _worldMap, _worldMap->getRobotRadius(), actuator);
             } else {
                 _state = POSITIONING_STATE;
             }
-        }break;
+        } break;
 
         case POSITIONING_STATE: {
-            QVector2D opponentGoal(_opponentGoalX, _opponentGoalY);
-            QVector2D ballPos = _worldMap->getBallPosition();
-            
             QVector2D desiredPos = calculateBestPosition();
-
-            _player->pathPlanning(desiredPos, _worldMap, _worldMap->getRobotRadius(), actuator);
+            _player->univector(desiredPos, _worldMap, _worldMap->getRobotRadius(), actuator);
 
             Player *player = _worldMap->getPlayerClosestToBall(_player->getPlayerColor());
-
-            if(player == _player) {
+            if (player == _player) {
                 _state = TAKE_BALL_STATE;
-            } else {
-                _state = POSITIONING_STATE;
             }
-        }break;
-
-   }
+        } break;
+    }
 }
 
 bool BlockAttackBehavior::shouldActivate() {
@@ -157,10 +146,7 @@ QVector2D BlockAttackBehavior::calculateBestPosition() {
     QVector2D bestPoint;
 
     for(std::vector<QVector2D> t : triangles) {
-        std::cout << "Ado" << std::endl;
         QVector2D center = Basic::getCircumcenter(t);
-        
-        std::cout << center.x() << center.y() << std::endl;
         
         float minDist = std::numeric_limits<float>::max();
 

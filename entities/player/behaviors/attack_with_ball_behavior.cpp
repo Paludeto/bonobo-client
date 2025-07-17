@@ -18,23 +18,19 @@ AttackWithBallBehavior::AttackWithBallBehavior(Player *player, WorldMap *worldMa
 void AttackWithBallBehavior::execute(ActuatorClient *actuator) {
     switch (_state) {
         case STATE_ATTACK: {
-            QVector2D opponentGoal(_opponentGoalX, _opponentGoalY);
-            QVector2D ballPos = _worldMap->getBallPosition();
-            
-            if(hasBallPossession()) {
+            if (hasBallPossession()) {
+                QVector2D opponentGoal(_opponentGoalX, _opponentGoalY);
+                _player->univector(opponentGoal, _worldMap, _worldMap->getRobotRadius(), actuator);
+                break;  // continua atacando, não muda de estado
+            }
 
-                _player->pathPlanning(opponentGoal, _worldMap, _worldMap->getRobotRadius(), actuator);
-                
-            } 
-
-            Player *player = _worldMap->getPlayerClosestToBall(_player->getPlayerColor());
-
-            if(player == _player) {
+            // Se não tem posse, checa se é o mais próximo
+            Player* player = _worldMap->getPlayerClosestToBall(_player->getPlayerColor());
+            if (player == _player) {
                 _state = TAKE_BALL_STATE;
             } else {
                 _state = POSITIONING_STATE;
             }
-            
         } break;
 
         case TAKE_BALL_STATE: {
@@ -46,35 +42,26 @@ void AttackWithBallBehavior::execute(ActuatorClient *actuator) {
 
             QVector2D behindBallPos = ballPos - direction * 0.1f;
 
-            _player->pathPlanning(ballPos, _worldMap, _worldMap->getRobotRadius(), actuator);
-            
+            _player->univector(behindBallPos, _worldMap, _worldMap->getRobotRadius(), actuator);
+
             float distanceToBall = Basic::getDistance(_player->getCoordinates(), ballPos);
-            
-            if(distanceToBall < 0.08) {
+            if (distanceToBall < 0.09f) {
                 _state = STATE_ATTACK;
             }
         } break;
 
         case POSITIONING_STATE: {
-            QVector2D opponentGoal(_opponentGoalX, _opponentGoalY);
-            QVector2D ballPos = _worldMap->getBallPosition();
-            
-
             QVector2D desiredPos = calculateBestPosition();
+            _player->univector(desiredPos, _worldMap, _worldMap->getRobotRadius(), actuator);
 
-            _player->pathPlanning(desiredPos, _worldMap, _worldMap->getRobotRadius(), actuator);
-
-            Player *player = _worldMap->getPlayerClosestToBall(_player->getPlayerColor());
- 
-            if(player == _player) {
+            Player* player = _worldMap->getPlayerClosestToBall(_player->getPlayerColor());
+            if (player == _player) {
                 _state = TAKE_BALL_STATE;
-            } else {
-                _state = POSITIONING_STATE;
             }
-            
         } break;
     }
 }
+
 
 bool AttackWithBallBehavior::shouldActivate() {
     
@@ -129,10 +116,7 @@ QVector2D AttackWithBallBehavior::calculateBestPosition() {
     QVector2D bestPoint;
 
     for(std::vector<QVector2D> t : triangles) {
-        std::cout << "Ado" << std::endl;
         QVector2D center = Basic::getCircumcenter(t);
-        
-        std::cout << center.x() << center.y() << std::endl;
         
         float minDist = std::numeric_limits<float>::max();
 

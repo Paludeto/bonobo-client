@@ -1,5 +1,6 @@
 #include "worldmap.h"
 #include <chrono>
+#include <QDateTime>
 #include "basics/basic.h"
 
 // Implement buffering in vision.cpp to avoid networki spikes
@@ -62,6 +63,23 @@ void WorldMap::updatePlayers(Color teamColor) {
         auto& robot = (teamColor == Color::BLUE) ? _lastFrame.robots_blue(id) : _lastFrame.robots_yellow(id);
         teamList[id]->_coordinates = QVector2D(robot.x(), robot.y());
         teamList[id]->_orientation = robot.orientation();
+        
+        qint64 now = QDateTime::currentMSecsSinceEpoch();
+        float newOrientation = robot.orientation();
+        float oldOrientation = teamList[id]->_lastOrientation;
+        qint64 lastTime = teamList[id]->_lastUpdateTime;
+
+        if (lastTime > 0) {
+            float dt = (now - lastTime) / 1000.0f; // segundos
+            if (dt > 0.0f) {
+                float dTheta = Basic::smallestAngleDiff(oldOrientation, newOrientation);
+                teamList[id]->_angularVelocity = dTheta / dt;
+            }
+        }
+
+        teamList[id]->_lastOrientation = newOrientation;
+        teamList[id]->_lastUpdateTime = now;
+
         teamList[id]->_vX = robot.vx();
         teamList[id]->_vY = robot.vy();
 

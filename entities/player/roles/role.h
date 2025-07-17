@@ -5,10 +5,12 @@
 #include "worldmap/worldmap.h"
 #include "actuator/actuator.h"
 #include "player/behaviors/behavior.h"
+#include "player/skills/skill_wall_spin.h"
 
 #include <memory>
 #include <vector>
 #include <string>
+#include <QElapsedTimer> 
 
 /**
  * @brief Base class for all roles in the hierachical control system
@@ -19,7 +21,7 @@
 class Role 
 {
 public:
-    Role(Player *player, WorldMap *worldMap) : _player(player), _worldMap(worldMap), _activeBehaviorIndex(-1) {}
+    Role(Player *player, WorldMap *worldMap) : _player(player), _worldMap(worldMap), _activeBehaviorIndex(-1), _isStuckOnWall(false) { _lastPosition = _player->getCoordinates(); }
 
     virtual ~Role() = default;
 
@@ -43,6 +45,11 @@ protected:
     WorldMap *_worldMap;
     std::vector<std::unique_ptr<Behavior>> _behaviors; // Vector of smart pointers of behaviors
     int _activeBehaviorIndex;
+
+    bool _isStuckOnWall;
+    QElapsedTimer _stuckTimer;
+    QVector2D _lastPosition;
+    std::unique_ptr<WallSpinSkill> _wallSpinSkill;
 };
 
 

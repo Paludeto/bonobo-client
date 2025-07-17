@@ -2,6 +2,8 @@
 #include "skills/skill_goTo.h"
 #include "skills/skill_rotateTo.h"
 #include "skills/rrt/skill_rrt.h"
+#include "skills/univector.h"
+#include <cmath>
 
 quint8 Player::getPlayerId() {
     return _playerId;
@@ -22,6 +24,10 @@ float Player::getLinearSpeed() {
 
 QVector2D Player::getVelocity() {
     return QVector2D(_vX, _vY);
+}
+
+float Player::getAngularVelocity() const {
+    return _angularVelocity;
 }
 
 void Player::goTo(QVector2D targetCoordinates, ActuatorClient *actuator) {
@@ -77,4 +83,21 @@ void Player::pathPlanning(QVector2D& targetPosition, WorldMap *worldMap, float r
         RRT* rrt = static_cast<RRT*>(_skillManager.get());
         _rrtStuckCounter = rrt->getStuckCounter();
     }
+}
+
+void Player::univector(QVector2D& targetPosition, WorldMap* worldMap, float robotRadius, ActuatorClient* actuator) {
+    if (!worldMap || !actuator) {
+        return;
+    }
+
+    QVector2D univectorDirection = UnivectorField::getDirection(this, targetPosition, worldMap);
+
+    QVector2D currentPos = getCoordinates();
+    float distanceToTarget = (targetPosition - currentPos).length();
+    float lookaheadDistance = std::clamp(0.1f + 0.2f * distanceToTarget, 0.1f, 0.3f);
+
+    QVector2D newTarget = currentPos + univectorDirection * lookaheadDistance;
+
+    _skillManager = std::make_unique<GoTo>(this, newTarget);
+    _skillManager->runSkill(actuator);
 }

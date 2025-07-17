@@ -10,15 +10,15 @@ Coach::Coach(WorldMap *worldMap, ActuatorClient *actuator, Color color) : _wm(wo
     // Set our goal and opponent goal positions
     if (color == Color::BLUE) {
         // Blue team has goal on the right side (+x)
-        _ownGoalX = fieldHalfWidth;
-        _ownGoalY = 0.0f;
-        _opponentGoalX = -fieldHalfWidth;
-        _opponentGoalY = 0.0f;
-    } else {
-        // Yellow team has goal on the left side (-x)
         _ownGoalX = -fieldHalfWidth;
         _ownGoalY = 0.0f;
         _opponentGoalX = fieldHalfWidth;
+        _opponentGoalY = 0.0f;
+    } else {
+        // Yellow team has goal on the left side (-x)
+        _ownGoalX = fieldHalfWidth;
+        _ownGoalY = 0.0f;
+        _opponentGoalX = -fieldHalfWidth;
         _opponentGoalY = 0.0f;
     }
     

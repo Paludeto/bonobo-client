@@ -1,29 +1,59 @@
 #include "role.h"
+#include "player/skills/skill_wall_spin.h"
 #include <iostream>
 
 void Role::executeRole(ActuatorClient *actuator) {
-    // Update any role-specific state before selecting a behavior
-    updateRoleState();
+    QVector2D currentPos = _player->getCoordinates();
+    
+    float wallMargin = _worldMap->getRobotRadius() * 2.0f + 0.05f;
 
-    // Select the most appropriate behavior
+    bool isNearYWall = std::abs(currentPos.y()) > (_worldMap->getFieldWidth() / 2.0f) - wallMargin;
+    bool isNearXWall = std::abs(currentPos.x()) > (_worldMap->getFieldLength() / 2.0f) - wallMargin;
+
+    bool isNearWall = isNearYWall || isNearXWall;
+
+
+    if (Basic::getDistance(currentPos, _lastPosition) < 0.015f) { 
+        if (isNearWall && !_stuckTimer.isValid()) { 
+            _stuckTimer.start();
+        }
+    } else { 
+        _stuckTimer.invalidate();
+        _lastPosition = currentPos;
+    }
+
+    if (isNearWall && _stuckTimer.isValid() && _stuckTimer.elapsed() > 1000) {
+        if (!_wallSpinSkill) {
+            bool spinClockwise = (currentPos.y() > 0); // Gira para o lado que o afasta da parede
+            _wallSpinSkill = std::make_unique<WallSpinSkill>(_player, spinClockwise);
+            _isStuckOnWall = true;
+            std::cout << "Player " << _player->getPlayerId() << " (Role) - PRESO! Ativando WallSpinSkill." << std::endl;
+        }
+    }
+
+    if (_isStuckOnWall && _wallSpinSkill) {
+        _wallSpinSkill->runSkill(actuator);
+
+        if (_wallSpinSkill->isComplete()) {
+            _wallSpinSkill.reset();
+            _isStuckOnWall = false;
+            _stuckTimer.invalidate();
+        }
+    }
+
+    updateRoleState();
     int selectedBehaviorIndex = selectBehavior();
 
-    // Check if behavior has changed
-    if(selectedBehaviorIndex != _activeBehaviorIndex) {
-        // Deactivate current behavior if one is active
-        if(_activeBehaviorIndex >= 0 && _activeBehaviorIndex < _behaviors.size()) {
+    if (selectedBehaviorIndex != _activeBehaviorIndex) {
+        if (_activeBehaviorIndex >= 0 && _activeBehaviorIndex < _behaviors.size()) {
             _behaviors[_activeBehaviorIndex]->deactivate();
         }
-
-        // Set and activate new behavior if one was selected
         _activeBehaviorIndex = selectedBehaviorIndex;
-        if(_activeBehaviorIndex >= 0 && _activeBehaviorIndex < _behaviors.size()) {
+        if (_activeBehaviorIndex >= 0 && _activeBehaviorIndex < _behaviors.size()) {
             _behaviors[_activeBehaviorIndex]->activate();
         }
-    } 
+    }
 
-    // Execute
-    // Execute the active behavior if one is selected
     if (_activeBehaviorIndex >= 0 && _activeBehaviorIndex < _behaviors.size()) {
         _behaviors[_activeBehaviorIndex]->execute(actuator);
     }
