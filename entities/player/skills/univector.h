@@ -12,8 +12,8 @@ public:
     static QVector2D getDirection(Player *player, const QVector2D& target, WorldMap *worldMap);
 
 private:
-    static constexpr float DE = 0.2032f;
-    static constexpr float KR = 0.3212f;
+    static constexpr float DE = 0.1f;
+    static constexpr float KR = 0.2f;
     static constexpr float D_MIN = 0.0588f;
     static constexpr float D_MIN_ROBOT = 0.0588f;
     static constexpr float DELTA = 0.5515f; 

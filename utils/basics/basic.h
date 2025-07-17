@@ -55,7 +55,7 @@ public:
 
     static std::vector<std::vector<QVector2D>> triangularization(std::vector<QVector2D> points);
 
-    static QVector2D getCircumcenter(std::vector<QVector2D> t);
+    static QVector2D getCircumcenter(std::vector<QVector2D> t, WorldMap* worldMap);
 };
 
 

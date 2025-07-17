@@ -86,20 +86,13 @@ bool Basic::pointInCircumcicle(const QVector2D p, const Triangle tri) {
     float cx = tri.c.x() - p.x();
     float cy = tri.c.y() - p.y();
 
-    float det = (ax * (bx * (cx * cx + cy * cy) - cy * (bx * bx + by * by)) -
-                 ay * (bx * (cx * cx + cy * cy) - cx * (bx * bx + by * by)) +
-                (ax * ax + ay * ay) * (bx * cy - by * cx));
+    float det = (ax * ax + ay * ay) * (bx * cy - cx * by) -
+                (bx * bx + by * by) * (ax * cy - cx * ay) +
+                (cx * cx + cy * cy) * (ax * by - bx * ay);
 
     float orientation = (tri.b.x() - tri.a.x()) * (tri.c.y() - tri.a.y()) - (tri.b.y() - tri.a.y()) * (tri.c.x() - tri.a.x());
 
-
-    if (orientation < 0)
-    det = -det;
-
-return det > 0;
-    
-    return det > 0;
-
+    return (orientation > 0) ? (det > 0) : (det < 0);
 }
 
 std::vector<std::vector<QVector2D>> Basic::triangularization(std::vector<QVector2D> points) {
@@ -189,7 +182,7 @@ std::vector<std::vector<QVector2D>> Basic::triangularization(std::vector<QVector
     return result;
 }
 
-QVector2D Basic::getCircumcenter(std::vector<QVector2D> t) {
+QVector2D Basic::getCircumcenter(std::vector<QVector2D> t, WorldMap* worldMap) { 
     QVector2D A = t[0];
     QVector2D B = t[1];
     QVector2D C = t[2];
@@ -208,8 +201,9 @@ QVector2D Basic::getCircumcenter(std::vector<QVector2D> t) {
     float ux = (ax2ay2 * (by - cy) + bx2by2 * (cy - ay) + cx2cy2 * (ay - by)) / d;
     float uy = (ax2ay2 * (cx - bx) + bx2by2 * (ax - cx) + cx2cy2 * (bx - ax)) / d;
 
-    ux = std::clamp(ux, -0.60f, 0.60f);
-    uy = std::clamp(uy, -0.50f, 0.50f);
+    float margin = 0.8f; 
+    ux = std::clamp(ux, worldMap->getMinX() + margin, worldMap->getMaxX() - margin);
+    uy = std::clamp(uy, worldMap->getMinY() + margin, worldMap->getMaxY() - margin);
 
     return QVector2D(ux, uy);
 }

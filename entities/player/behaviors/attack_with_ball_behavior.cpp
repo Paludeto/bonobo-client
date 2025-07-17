@@ -20,8 +20,16 @@ void AttackWithBallBehavior::execute(ActuatorClient *actuator) {
         case STATE_ATTACK: {
             if (hasBallPossession()) {
                 QVector2D opponentGoal(_opponentGoalX, _opponentGoalY);
-                _player->univector(opponentGoal, _worldMap, _worldMap->getRobotRadius(), actuator);
-                break;  // continua atacando, não muda de estado
+
+                QVector2D attackVector = opponentGoal - _player->getCoordinates();
+                attackVector.normalize();
+
+                QVector2D strategicTarget = opponentGoal + attackVector * 0.15;
+
+                _player->univector(strategicTarget, _worldMap, _worldMap->getRobotRadius(), actuator);
+                std::cout << "To aqui\n";
+                
+                break;
             }
 
             // Se não tem posse, checa se é o mais próximo
@@ -45,7 +53,7 @@ void AttackWithBallBehavior::execute(ActuatorClient *actuator) {
             _player->univector(behindBallPos, _worldMap, _worldMap->getRobotRadius(), actuator);
 
             float distanceToBall = Basic::getDistance(_player->getCoordinates(), ballPos);
-            if (distanceToBall < 0.09f) {
+            if (distanceToBall < 5.0f) {
                 _state = STATE_ATTACK;
             }
         } break;
@@ -116,7 +124,7 @@ QVector2D AttackWithBallBehavior::calculateBestPosition() {
     QVector2D bestPoint;
 
     for(std::vector<QVector2D> t : triangles) {
-        QVector2D center = Basic::getCircumcenter(t);
+        QVector2D center = Basic::getCircumcenter(t, _worldMap);
         
         float minDist = std::numeric_limits<float>::max();
 

@@ -13,36 +13,65 @@ DefendGoalBehavior::DefendGoalBehavior(Player *player, WorldMap *worldMap, float
 }
 
 void DefendGoalBehavior::execute(ActuatorClient *actuator) {
-    // Switch state
-    switch (_state) {
-        default:
-        case STATE_GOTO: {
+    // A lógica para afastar a bola continua a ser a prioridade máxima.
+    if (isInsideOurArea(_worldMap->getBallPosition(), TAKEOUT_FACTOR_IN)) {
+        _state = STATE_SHORTTAKEOUT;
+    }
 
+    switch (_state) {
+        case STATE_GOTO: {
+            QVector2D ballPos = _worldMap->getBallPosition();
+            float targetY;
+
+            if (ballPos.y() >= 0.16f) {
+                targetY = 0.16f;
+            } else if (ballPos.y() <= -0.16f) {
+                targetY = -0.16f;
+            } else {
+                targetY = 0.0f;
+            }
+            
+            float targetX = (_player->getPlayerColor() == VSSRef::Color::YELLOW) ? 0.65f : -0.65f;
+            QVector2D finalPos(targetX, targetY);
+
+
+            float desiredAngle = M_PI / 2.0f; 
+
+            QVector2D currentPos = _player->getCoordinates();
+            float currentAngle = _player->getOrientation();
+
+            float error_y = finalPos.y() - currentPos.y();
+            float error_x = finalPos.x() - currentPos.x();
+            float error_angle = Basic::smallestAngleDiff(currentAngle, desiredAngle);
+
+            const float KP_LINEAR = 60.0f; 
+            const float KP_ANGULAR = 40.0f; 
+
+            float forward_speed = KP_LINEAR * error_y;
+            float sideways_speed = KP_LINEAR * error_x; 
+            float rotation_speed = KP_ANGULAR * error_angle;
+
+            forward_speed = std::clamp(forward_speed, -70.0f, 70.0f);
+            sideways_speed = std::clamp(sideways_speed, -50.0f, 50.0f);
+            rotation_speed = std::clamp(rotation_speed, -50.0f, 50.0f);
+
+            float leftWheelSpeed = forward_speed + sideways_speed + rotation_speed;
+            float rightWheelSpeed = forward_speed - sideways_speed - rotation_speed;
+
+            actuator->sendCommand(_player->getPlayerId(), leftWheelSpeed, rightWheelSpeed);
 
         } break;
         
         case STATE_SHORTTAKEOUT: {
-            // In takeout state, we push the ball away from our goal
-            
-            // Get positions
+            // Esta lógica está correta e permanece a mesma.
             QVector2D ballPos = _worldMap->getBallPosition();
-            QVector2D robotPos = _player->getCoordinates();
-            
-            // Move to push ball away
-            _player->goTo(ballPos, actuator);
-            
-            ballPos = _worldMap->getBallPosition();
-            robotPos = _player->getCoordinates();
+            _player->goTo(ballPos, actuator); 
 
-            float distanceToBall = Basic::getDistance(robotPos, ballPos);
-
-            if(distanceToBall < 0.08) {
+            if (Basic::getDistance(_player->getCoordinates(), ballPos) < 0.08f) {
                 actuator->sendCommand(_player->getPlayerId(), 100, -100);
             }
             
-            // Check if we should switch back to normal positioning
             if (!isInsideOurArea(ballPos, TAKEOUT_FACTOR_OUT)) {
-                std::cout << "DefendGoalBehavior: Ball left our area, returning to normal positioning" << std::endl;
                 _state = STATE_GOTO;
             }
         } break;
@@ -131,7 +160,7 @@ bool DefendGoalBehavior::isBallComingToGoal(float postsFactor) {
 
 // TODO : Correct factors and consts to take ball right
 bool DefendGoalBehavior::isInsideOurArea(const QVector2D& point, float factor) {
-    if(point.x() > 0.5 && point.y() < 0.4 && point.y() > -0.4) {
+    if(point.x() < -0.5 && point.y() < 0.4 && point.y() > -0.4) {
         return true;
     }
     else {

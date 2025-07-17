@@ -35,14 +35,6 @@ QVector2D UnivectorField::getDirection(Player *player, const QVector2D& target, 
     
     QVector2D finalVector = attractiveField * (1.0f - alpha) + repulsiveField * alpha;
     
-    std::cout << "---------------------------\n";
-    std::cout << "[UNIVECTOR] Robo " << player->getPlayerId() << " Pos: (" << robotPos.x() << ", " << robotPos.y() << ")\n";
-    std::cout << "[UNIVECTOR] Distancia Minima do Obstaculo: " << minDistance << "\n";
-    std::cout << "[UNIVECTOR] Peso da Repulsao (alpha): " << alpha << "\n";
-    std::cout << "[UNIVECTOR] Vetor Atracao: (" << attractiveField.x() << ", " << attractiveField.y() << ")\n";
-    std::cout << "[UNIVECTOR] Vetor Repulsao: (" << repulsiveField.x() << ", " << repulsiveField.y() << ")\n";
-    std::cout << "[UNIVECTOR] Vetor Final: (" << finalVector.normalized().x() << ", " << finalVector.normalized().y() << ")\n";
-    
     return finalVector.normalized();
 }
 
@@ -53,7 +45,7 @@ QVector2D UnivectorField::avoidObstacleField(const QVector2D& robotPos, Player *
     for (Player *obstaclePlayer : allPlayers) {
         if(obstaclePlayer->getPlayerId() != player->getPlayerId()) {
             float distance = Basic::getDistance(robotPos, obstaclePlayer->getCoordinates());
-            if (distance < D_MIN_ROBOT * 3.0f) {
+            if (distance < D_MIN_ROBOT * 4.0f) {
                 QVector2D repulsiveVector = robotPos - obstaclePlayer->getCoordinates();
                 resultingVector += repulsiveVector.normalized() / distance;
             }

@@ -146,7 +146,7 @@ QVector2D BlockAttackBehavior::calculateBestPosition() {
     QVector2D bestPoint;
 
     for(std::vector<QVector2D> t : triangles) {
-        QVector2D center = Basic::getCircumcenter(t);
+        QVector2D center = Basic::getCircumcenter(t, _worldMap);
         
         float minDist = std::numeric_limits<float>::max();
 
