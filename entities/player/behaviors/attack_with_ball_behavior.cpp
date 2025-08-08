@@ -52,7 +52,6 @@ void AttackWithBallBehavior::execute(ActuatorClient *actuator) {
             QVector2D behindBallPos = ballPos - direction * 0.1f;
             
             std::cout << _player->getVelocity().x() << "\n";
-
             _player->univector(behindBallPos, _worldMap, _worldMap->getRobotRadius(), actuator);
 
             float distanceToBall = Basic::getDistance(_player->getCoordinates(), ballPos);
