@@ -39,9 +39,8 @@ public:
 
     fira_message::sim_to_ref::Environment getEnvironment();
 
-    // Field dimensions (in meters)
-    float getFieldLength() const { return 1.5f; } // 1.5m
-    float getFieldWidth() const { return 1.3f; }  // 1.3m
+    float getFieldLength() const { return 1.5f; } 
+    float getFieldWidth() const { return 1.3f; }  
     
     // Field limits
     float getMinX() const { return -getFieldLength()/2.0f; }
@@ -50,18 +49,19 @@ public:
     float getMaxY() const { return getFieldWidth()/2.0f; }
     
     // Goal dimensions
-    float getGoalWidth() const { return 0.4f; }  // 40cm
+    float getGoalWidth() const { return 0.4f; }
+    float getGoalDepth() const { return 0.1f; }
     float getAreaLength() const { return 0.7f; }
     float getAreaWidth() const { return 0.15f; }
     
-    // Goal positions for BLUE team (goal at positive X)
+    // Goal positions for blue team (goal at positive X)
     QVector2D getBlueGoalCenter() const { return QVector2D(getMaxX(), 0.0f); }
 
     QVector2D getOurRightPost(VSSRef::Color color) const;
     QVector2D getOurLeftPost(VSSRef::Color color) const;
     QVector2D getOurGoalCenter(VSSRef::Color color) const;
     
-    // Goal positions for YELLOW team (goal at negative X)
+    // Goal positions for yellow team (goal at negative X)
     QVector2D getYellowGoalCenter() const { return QVector2D(getMinX(), 0.0f); }
     
     // Ball and player properties

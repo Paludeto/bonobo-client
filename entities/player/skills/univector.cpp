@@ -52,6 +52,30 @@ QVector2D UnivectorField::avoidObstacleField(const QVector2D& robotPos, Player *
         }
     }
 
+    float goalRepulsionThreshold = 0.20f;  
+    float goalRepulsionWeight = 0.5f;      
+    float goalX = (player->getPlayerColor() == VSSRef::Color::BLUE)
+                    ? worldMap->getMinX()
+                    : worldMap->getMaxX();
+
+    float goalMinY = -worldMap->getGoalWidth() / 2.0f;
+    float goalMaxY =  worldMap->getGoalWidth() / 2.0f;
+
+    int samples = 5;
+    for (int i = 0; i < samples; ++i) {
+        float t = static_cast<float>(i) / (samples - 1);
+        float y = goalMinY + t * (goalMaxY - goalMinY);
+        QVector2D goalPoint(goalX, y);
+
+        float dist = Basic::getDistance(robotPos, goalPoint);
+        if (dist < goalRepulsionThreshold) {
+            QVector2D repulsion = (robotPos - goalPoint).normalized() / dist;
+            resultingVector += repulsion * goalRepulsionWeight;
+        }
+    }
+
+
+
     float wallRepulsionThreshold = 0.08f; 
     float distTop = worldMap->getMaxY() - robotPos.y();
     float distBottom = robotPos.y() - worldMap->getMinY();

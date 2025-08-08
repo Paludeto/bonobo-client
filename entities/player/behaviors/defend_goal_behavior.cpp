@@ -13,7 +13,6 @@ DefendGoalBehavior::DefendGoalBehavior(Player *player, WorldMap *worldMap, float
 }
 
 void DefendGoalBehavior::execute(ActuatorClient *actuator) {
-    // A lógica para afastar a bola continua a ser a prioridade máxima.
     if (isInsideOurArea(_worldMap->getBallPosition(), TAKEOUT_FACTOR_IN)) {
         _state = STATE_SHORTTAKEOUT;
     }
@@ -63,7 +62,6 @@ void DefendGoalBehavior::execute(ActuatorClient *actuator) {
         } break;
         
         case STATE_SHORTTAKEOUT: {
-            // Esta lógica está correta e permanece a mesma.
             QVector2D ballPos = _worldMap->getBallPosition();
             _player->goTo(ballPos, actuator); 
 
