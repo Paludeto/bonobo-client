@@ -6,9 +6,9 @@
 class GoTo : public SkillManager 
 {
 
-static constexpr float KP = 20; // How to consolidate all constants into a single header file?
+static constexpr float KP = 20; 
 static constexpr float KD = 2.5;
-static constexpr float BASE_SPEED = 30.0f;
+static constexpr float BASE_SPEED = 32.0f;
 
 public:
     

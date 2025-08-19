@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
     QCoreApplication a(argc, argv);
 
     // Setting our color as YELLOW
-    VSSRef::Color ourColor = VSSRef::Color::YELLOW;
+    VSSRef::Color ourColor = VSSRef::Color::BLUE;
 
     // Desired frequency in hz
     float freq = 60.0;
@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
     Timer timer;
 
     VisionClient *visionClient = new VisionClient("224.0.0.1", 10002);
-    ActuatorClient *actuatorClient = new ActuatorClient("127.0.0.1", 20011);
+    ActuatorClient *actuatorClient = new ActuatorClient("127.0.0.1", 20013);
     WorldMap *wm = new WorldMap(visionClient);
     Coach *coach = new Coach(wm, actuatorClient, ourColor);
     

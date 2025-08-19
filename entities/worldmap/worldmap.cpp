@@ -1,5 +1,7 @@
 #include "worldmap.h"
 #include <chrono>
+#include <QDateTime>
+#include "basics/basic.h"
 
 // Implement buffering in vision.cpp to avoid networki spikes
 bool WorldMap::updateFrame() {
@@ -61,6 +63,23 @@ void WorldMap::updatePlayers(Color teamColor) {
         auto& robot = (teamColor == Color::BLUE) ? _lastFrame.robots_blue(id) : _lastFrame.robots_yellow(id);
         teamList[id]->_coordinates = QVector2D(robot.x(), robot.y());
         teamList[id]->_orientation = robot.orientation();
+        
+        qint64 now = QDateTime::currentMSecsSinceEpoch();
+        float newOrientation = robot.orientation();
+        float oldOrientation = teamList[id]->_lastOrientation;
+        qint64 lastTime = teamList[id]->_lastUpdateTime;
+
+        if (lastTime > 0) {
+            float dt = (now - lastTime) / 1000.0f; // segundos
+            if (dt > 0.0f) {
+                float dTheta = Basic::smallestAngleDiff(oldOrientation, newOrientation);
+                teamList[id]->_angularVelocity = dTheta / dt;
+            }
+        }
+
+        teamList[id]->_lastOrientation = newOrientation;
+        teamList[id]->_lastUpdateTime = now;
+
         teamList[id]->_vX = robot.vx();
         teamList[id]->_vY = robot.vy();
 
@@ -69,15 +88,18 @@ void WorldMap::updatePlayers(Color teamColor) {
 }
 
 void WorldMap::updateBallPosition() {
-
+    _prevBallPosition = _ballPosition;
     _ballPosition = QVector2D(_lastFrame.ball().x(), _lastFrame.ball().y());
-
 }
 
 QVector2D &WorldMap::getBallPosition() {
     
     return _ballPosition;
 
+}
+
+QVector2D WorldMap::getBallVelocity() {
+    return (_ballPosition - _prevBallPosition) / (1/60);
 }
 
 QList<Player *> WorldMap::getTeam(Color color) {
@@ -89,5 +111,104 @@ QList<Player *> WorldMap::getTeam(Color color) {
     } else {
         throw std::invalid_argument("Invalid team color specified");
     }
+}
 
+fira_message::sim_to_ref::Environment WorldMap::getEnvironment() {
+    return _frameUpdater->getLastEnvironment();
+}
+
+QVector2D WorldMap::getOurRightPost(VSSRef::Color color) const {
+
+    if(color == VSSRef::BLUE) {
+        return QVector2D(getMaxX(), getGoalWidth()/2.0f);
+    } else {
+        return QVector2D(getMinX(), -getGoalWidth()/2.0f);
+    }
+}
+
+QVector2D WorldMap::getOurLeftPost(VSSRef::Color color) const {
+
+    if(color == VSSRef::BLUE) {
+        return QVector2D(getMaxX(), -getGoalWidth()/2.0f);
+    } else {
+        return QVector2D(getMinX(), -getGoalWidth()/2.0f);
+    }
+}
+
+QVector2D WorldMap::getOurGoalCenter(VSSRef::Color color) const {
+
+    if(color == VSSRef::BLUE) {
+        return QVector2D(getMaxX(), 0.0f);
+    } else {
+        return QVector2D(getMinX(), 0.0f);
+    }
+}
+
+// Team perception methods implementation
+bool WorldMap::isTeammateNearerToBall(Player* player) const {
+    // Get the ball position
+    QVector2D ballPos = _ballPosition;
+    
+    // Get player position and distance to ball
+    QVector2D playerPos = player->getCoordinates();
+    float playerDistToBall = Basic::getDistance(playerPos, ballPos);
+    
+    // Get player's team
+    Color teamColor = player->getPlayerColor();
+    QList<Player*> team = (teamColor == Color::BLUE) ? _blueTeam : _yellowTeam;
+    
+    // Check if any teammate is closer to the ball
+    for (Player* teammate : team) {
+        // Skip the player itself
+        if (teammate->getPlayerId() == player->getPlayerId()) {
+            continue;
+        }
+        
+        QVector2D teammatePos = teammate->getCoordinates();
+        float teammateDistToBall = Basic::getDistance(teammatePos, ballPos);
+        
+        // If teammate is closer to the ball
+        if (teammateDistToBall < playerDistToBall) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+bool WorldMap::isPlayerControllingBall(Player* player) const {
+    // Get ball and player positions
+    QVector2D ballPos = _ballPosition;
+    QVector2D playerPos = player->getCoordinates();
+    
+    // Calculate distance
+    float distance = Basic::getDistance(playerPos, ballPos);
+    
+    float controlThreshold = 0.09;
+    
+    return distance <= controlThreshold;
+}
+
+Player* WorldMap::getPlayerClosestToBall(Color teamColor) const {
+    // Get the team
+    QList<Player*> team = (teamColor == Color::BLUE) ? _blueTeam : _yellowTeam;
+    
+    // Find closest player
+    Player* closestPlayer = nullptr;
+    float minDistance = std::numeric_limits<float>::max();
+    
+    for (Player* player : team) {
+        if(player->getPlayerId() == 0) {
+            continue;
+        }
+
+        float distance = Basic::getDistance(player->getCoordinates(), _ballPosition);
+        
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestPlayer = player;
+        }
+    }
+    
+    return closestPlayer;
 }
