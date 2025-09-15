@@ -204,7 +204,7 @@ Player* WorldMap::getPlayerClosestToBall(Color teamColor) const {
 
         float distance = Basic::getDistance(player->getCoordinates(), _ballPosition);
         
-        if (distance < minDistance) {
+        if (distance < minDistance - 0.2f) {
             minDistance = distance;
             closestPlayer = player;
         }
