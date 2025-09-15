@@ -85,7 +85,7 @@ bool AttackWithBallBehavior::shouldKeepActive() {
 
 int AttackWithBallBehavior::getPriority() const {
     // High priority when we have the ball
-    return hasBallPossession() ? 100 : 90;
+    return _worldMap->isPlayerControllingBall(_player) ? 100 : 90;
 }
 
 QVector2D AttackWithBallBehavior::calculateBestPosition() {
