@@ -25,6 +25,8 @@ int main(int argc, char *argv[]) {
     ActuatorClient *actuatorClient = new ActuatorClient("127.0.0.1", 20013);
     WorldMap *wm = new WorldMap(visionClient);
     Coach *coach = new Coach(wm, actuatorClient, ourColor);
+    RefereeClient *refereeClient = new RefereeClient("224.5.23.2", 10003);
+    ReplacerClient *replacerClient = new ReplacerClient("224.5.23.2", 10004);
     
    
     // Setting actuator and replacer teamColor
@@ -33,23 +35,32 @@ int main(int argc, char *argv[]) {
     while(1) {
 
         visionClient->run();
-        wm->updateFrame();
+        refereeClient->run();
+        bool frameUpdated = wm->updateFrame();
 
-        if (wm->updateFrame() == true) {
+        // Only allow the coach to move players when the game state is GAME_ON
+        if (frameUpdated && refereeClient->getLastFoul() == VSSRef::Foul::GAME_ON) {
             coach->runCoach();
         }
-    
+
+        actuatorClient->sendCommand(0, 0, 0);
+        actuatorClient->sendCommand(1, 0, 0);
+        actuatorClient->sendCommand(2, 0, 0);
+
+
         // Stop timer
         timer.stop();
 
         // Since we want the loop to run at a 60Hz frequency, we use T = 10E3 / f to get the remaining time in miliSeconds and subtract the elapsed time
         long remainingTime = (1000 / freq) - timer.getMiliSeconds();
-        std::this_thread::sleep_for(std::chrono::milliseconds(remainingTime));  // Pauses current thread until remaining time
-    }
+            // Guard against negative sleep in case processing overruns the timestep
+            std::this_thread::sleep_for(std::chrono::milliseconds(std::max<long>(0, remainingTime)));  // Pauses current thread until remaining time
+        }
 
     // Closing clients
     visionClient->close();
     actuatorClient->close();
+    
 
     return a.exec();
 }

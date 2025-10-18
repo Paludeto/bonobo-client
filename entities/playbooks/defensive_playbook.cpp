@@ -22,18 +22,15 @@ int DefensivePlaybook::getPriority() const {
 void DefensivePlaybook::initializeRoles() {
     QList<Player*> ourTeam = _worldMap->getTeam(_teamColor);
     
-    // Make sure we have enough players
-    if (ourTeam.size() < 3) {
-        return;
-    }
+
     
-    // Assign goalkeeper (player 0)
+    // // Assign goalkeeper (player 0)
     assignRole(0, std::make_unique<GoalkeeperRole>(ourTeam[0], _worldMap, _ownGoalX, _ownGoalY));
     
     // Assign defender (player 1)
     assignRole(1, std::make_unique<DefenderRole>(ourTeam[1], _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY));
     
-    // Assign attacker (player 2)
+    // // Assign attacker (player 2)
     assignRole(2, std::make_unique<DefenderRole>(ourTeam[2], _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY));
 }
 

@@ -12,18 +12,10 @@ public:
     static QVector2D getDirection(Player *player, const QVector2D& target, WorldMap *worldMap);
 
 private:
-    static constexpr float DE = 0.08f;
-    static constexpr float KR = 0.2f;
-    static constexpr float D_MIN = 0.09f;
-    static constexpr float D_MIN_ROBOT = 0.0003f;
+    static constexpr float DE = 0.05f;
+    static constexpr float KR = 0.3212f;
+    static constexpr float D_MIN_ROBOT = 0.0588f;
     static constexpr float DELTA = 0.5515f; 
-    static constexpr float K0 = 0.0448f;
-
-    static constexpr float SIGMA_OPPONENT = 0.3f;
-    static constexpr float SIGMA_TEAMMATE = 0.3f;
-    static constexpr float SIGMA_WALLS = 0.5f;
-    
-    static constexpr float D_MIN_WALLS = 0.0064f;
 
     static float hyperbolicSpiral(const QVector2D& p, const QVector2D& target, float de, float kr, bool clockwise);
     static QVector2D moveToGoalField(const QVector2D& p, const QVector2D& target, WorldMap* worldMap, Player* player);

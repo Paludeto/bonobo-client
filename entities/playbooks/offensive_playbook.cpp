@@ -24,12 +24,9 @@ void OffensivePlaybook::initializeRoles() {
     // Get our team
     QList<Player*> ourTeam = _worldMap->getTeam(_teamColor);
     
-    // Make sure we have enough players
-    if (ourTeam.size() < 3) {
-        return;
-    }
+
     
-    // Assign goalkeeper (player 0)
+    // // Assign goalkeeper (player 0)
     assignRole(0, std::make_unique<GoalkeeperRole>(ourTeam[0], _worldMap, _ownGoalX, _ownGoalY));
     
     // In offensive playbook, we have one defender and one attacker
@@ -37,7 +34,7 @@ void OffensivePlaybook::initializeRoles() {
     // Assign defender (player 1) - will still move up on offense
     assignRole(1, std::make_unique<AttackerRole>(ourTeam[1], _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY));
     
-    // Assign attacker (player 2)
+    // // Assign attacker (player 2)
     assignRole(2, std::make_unique<AttackerRole>(ourTeam[2], _worldMap, _ownGoalX, _ownGoalY, _opponentGoalX, _opponentGoalY));
 }
 
