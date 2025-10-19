@@ -22,8 +22,21 @@ void BlockAttackBehavior::execute(ActuatorClient *actuator) {
             Player *closer = _worldMap->getPlayerClosestToBall(_player->getPlayerColor());
 
             if (closer == _player) {
-                QVector2D desiredPos = calculateInterceptPosition();
-                _player->univector(desiredPos, _worldMap, _worldMap->getRobotRadius(), actuator);
+                QVector2D target = calculateInterceptPosition();
+
+                if (_worldMap->isInsideOurArea(target, 1.5f, _player->getPlayerColor())) {
+                    QVector2D ballPos = _worldMap->getBallPosition();
+                    QVector2D goal((_player->getPlayerColor() == VSSRef::BLUE)
+                                    ? _worldMap->getMinX() : _worldMap->getMaxX(),
+                                    0.0f);
+
+                    QVector2D direction = target - goal;
+                    direction.normalize();
+
+                    target = goal + direction * (_worldMap->getAreaLength() + 0.05f);
+                }
+
+                _player->univector(target, _worldMap, _worldMap->getRobotRadius(), actuator);
             } else {
                 _state = POSITIONING_STATE;
             }

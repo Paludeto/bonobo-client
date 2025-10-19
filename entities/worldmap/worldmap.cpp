@@ -119,29 +119,39 @@ fira_message::sim_to_ref::Environment WorldMap::getEnvironment() {
 
 QVector2D WorldMap::getOurRightPost(VSSRef::Color color) const {
 
-    if(color == VSSRef::BLUE) {
-        return QVector2D(getMaxX(), getGoalWidth()/2.0f);
-    } else {
-        return QVector2D(getMinX(), -getGoalWidth()/2.0f);
-    }
+    const float goalX = (color == VSSRef::BLUE) ? getMinX() : getMaxX();
+    return QVector2D(goalX, getGoalWidth() / 2.0f);
 }
 
 QVector2D WorldMap::getOurLeftPost(VSSRef::Color color) const {
 
-    if(color == VSSRef::BLUE) {
-        return QVector2D(getMaxX(), -getGoalWidth()/2.0f);
-    } else {
-        return QVector2D(getMinX(), -getGoalWidth()/2.0f);
-    }
+    const float goalX = (color == VSSRef::BLUE) ? getMinX() : getMaxX();
+    return QVector2D(goalX, -getGoalWidth() / 2.0f);
 }
 
 QVector2D WorldMap::getOurGoalCenter(VSSRef::Color color) const {
 
-    if(color == VSSRef::BLUE) {
-        return QVector2D(getMaxX(), 0.0f);
+    const float goalX = (color == VSSRef::BLUE) ? getMinX() : getMaxX();
+    return QVector2D(goalX, 0.0f);
+}
+
+bool WorldMap::isInsideOurArea(const QVector2D& point, float factor, VSSRef::Color team) {
+    const float goalX = (team == VSSRef::Color::YELLOW) ? getMaxX() : getMinX();
+    const float areaLength = getAreaLength() * factor; 
+    const float yHalf = std::max(getGoalWidth() * 0.5f, getAreaWidth()) * factor; 
+
+    float xMin, xMax;
+    if (team == VSSRef::Color::YELLOW) {
+        xMin = goalX - areaLength;
+        xMax = goalX;
     } else {
-        return QVector2D(getMinX(), 0.0f);
+        xMin = goalX;
+        xMax = goalX + areaLength;
     }
+
+    const bool insideX = (point.x() >= xMin && point.x() <= xMax);
+    const bool insideY = (point.y() >= -yHalf && point.y() <= yHalf);
+    return insideX && insideY;
 }
 
 // Team perception methods implementation

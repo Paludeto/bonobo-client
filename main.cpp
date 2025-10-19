@@ -39,13 +39,10 @@ int main(int argc, char *argv[]) {
         bool frameUpdated = wm->updateFrame();
 
         // Only allow the coach to move players when the game state is GAME_ON
-        if (frameUpdated && refereeClient->getLastFoul() == VSSRef::Foul::GAME_ON) {
+        if (frameUpdated) {
+            coach->updateFoulState(refereeClient->getLastFoul());
             coach->runCoach();
         }
-
-        actuatorClient->sendCommand(0, 0, 0);
-        actuatorClient->sendCommand(1, 0, 0);
-        actuatorClient->sendCommand(2, 0, 0);
 
 
         // Stop timer

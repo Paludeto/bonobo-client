@@ -80,6 +80,7 @@ public:
     bool isBallInTheirSide(Color ourTeam) const {
         return !isBallInOurSide(ourTeam);
     }
+    bool isInsideOurArea(const QVector2D& point, float factor, VSSRef::Color team);
     
     // Team perception methods
     bool isTeammateNearerToBall(Player* player) const;

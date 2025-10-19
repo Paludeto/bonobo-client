@@ -24,14 +24,26 @@ void AttackWithBallBehavior::execute(ActuatorClient *actuator) {
                 QVector2D attackVector = opponentGoal - _player->getCoordinates();
                 attackVector.normalize();
                 
-                QVector2D strategicTarget = opponentGoal + attackVector * 0.005f;
+                QVector2D target = opponentGoal + attackVector * 0.005f;
 
-                _player->univector(strategicTarget, _worldMap, _worldMap->getRobotRadius(), actuator);
-                std::cout << "To aqui\n";
+                if (_worldMap->isInsideOurArea(target, 1.5f, _player->getPlayerColor())) {
+                    QVector2D ballPos = _worldMap->getBallPosition();
+                    QVector2D goal((_player->getPlayerColor() == VSSRef::BLUE)
+                                    ? _worldMap->getMinX() : _worldMap->getMaxX(),
+                                    0.0f);
+
+                    QVector2D direction = target - goal;
+                    direction.normalize();
+
+                    target = goal + direction * (_worldMap->getAreaLength() + 0.05f);
+                }
+
+                _player->univector(target, _worldMap, _worldMap->getRobotRadius(), actuator);
+            
+
                 
                 break;
             }
-            std::cout << _player->getVelocity().x() << "\n";
 
             // Se não tem posse, checa se é o mais próximo
             Player* player = _worldMap->getPlayerClosestToBall(_player->getPlayerColor());
@@ -49,10 +61,21 @@ void AttackWithBallBehavior::execute(ActuatorClient *actuator) {
             QVector2D direction = opponentGoal - ballPos;
             direction.normalize();
 
-            QVector2D behindBallPos = ballPos - direction * 0.1f;
-            
-            std::cout << _player->getVelocity().x() << "\n";
-            _player->univector(behindBallPos, _worldMap, _worldMap->getRobotRadius(), actuator);
+            QVector2D target = ballPos - direction * 0.1f;
+
+            if (_worldMap->isInsideOurArea(target, 1.5f, _player->getPlayerColor())) {
+                QVector2D ballPos = _worldMap->getBallPosition();
+                QVector2D goal((_player->getPlayerColor() == VSSRef::BLUE)
+                                ? _worldMap->getMinX() : _worldMap->getMaxX(),
+                                0.0f);
+
+                QVector2D direction = target - goal;
+                direction.normalize();
+
+                target = goal + direction * (_worldMap->getAreaLength() + 0.05f);
+            }
+
+            _player->univector(target, _worldMap, _worldMap->getRobotRadius(), actuator);
 
             float distanceToBall = Basic::getDistance(_player->getCoordinates(), ballPos);
             if (distanceToBall < 5.0f) {

@@ -1,7 +1,7 @@
 #include "coach.h"
 #include <iostream>
 
-Coach::Coach(WorldMap *worldMap, ActuatorClient *actuator, Color color) : _wm(worldMap), _actuator(actuator), _ourColor(color) {
+Coach::Coach(WorldMap *worldMap, ActuatorClient *actuator, Color color, VSSRef::Foul foulState) : _wm(worldMap), _actuator(actuator), _ourColor(color), _foulState(foulState){
     _actuator->setTeamColor(color);
     
     // Determine goal positions based on team color
@@ -33,11 +33,33 @@ void Coach::setTeam(Color color) {
 void Coach::runCoach() {
     // Update our team reference
     setTeam(_ourColor);
+
+    if(_foulState == VSSRef::Foul::GAME_ON) {
+        // Execute the strategy, which will cascade down the control hierarchy
+        _strategy->executeStrategy();
+    }
+
+    if (_foulState == VSSRef::Foul::STOP ||
+        _foulState == VSSRef::Foul::PENALTY_KICK ||
+        _foulState == VSSRef::Foul::KICKOFF ||
+        _foulState == VSSRef::Foul::HALT ||
+        _foulState == VSSRef::Foul::GOAL_KICK ||
+        _foulState == VSSRef::Foul::FREE_KICK ||
+        _foulState == VSSRef::Foul::FREE_BALL) 
+    {
+        _actuator->sendCommand(0, 0, 0);
+        _actuator->sendCommand(1, 0, 0);
+        _actuator->sendCommand(2, 0, 0);
+    }
+
     
-    // Execute the strategy, which will cascade down the control hierarchy
-    _strategy->executeStrategy();
+
     
     // - Handle referee commands
     // - Manage game state transitions
     // - Adapt strategies based on opponent behavior
+}
+
+void Coach::updateFoulState(VSSRef::Foul newState) {
+    _foulState = newState;
 }

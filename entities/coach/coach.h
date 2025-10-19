@@ -16,12 +16,13 @@ using VSSRef::Color;
 class Coach
 {
 public:
-    Coach(WorldMap *wm, ActuatorClient *actuator, Color color);
+    Coach(WorldMap *wm, ActuatorClient *actuator, Color color, VSSRef::Foul foulState = VSSRef::Foul::GAME_ON);
     void runCoach();
     void setTeam(Color color);
     Strategy* getStrategy() const {
         return _strategy.get();
     }
+    void updateFoulState(VSSRef::Foul newState);
 
 private:
     ActuatorClient *_actuator;             
@@ -33,6 +34,7 @@ private:
     float _opponentGoalX;                  
     float _opponentGoalY;                  
     std::unique_ptr<Strategy> _strategy;   
+    VSSRef::Foul _foulState;
 };
 
 #endif // COACH_H
