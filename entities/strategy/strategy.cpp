@@ -60,7 +60,7 @@ void Strategy::initializePlaybooks() {
 }
 
 Playbook* Strategy::selectPlaybook() {
-    if(_worldMap->isBallInTheirSide(_teamColor)) {
+    if(_worldMap->isBallInTheirSide(_teamColor) || _worldMap->isOurTeamWithBall(_teamColor)) {
         return _playbooks[1].get();
     } else {
         return _playbooks[0].get();

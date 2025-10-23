@@ -18,36 +18,27 @@ AttackWithBallBehavior::AttackWithBallBehavior(Player *player, WorldMap *worldMa
 void AttackWithBallBehavior::execute(ActuatorClient *actuator) {
     switch (_state) {
         case STATE_ATTACK: {
-            if (_worldMap->isPlayerControllingBall(_player)) {
+            if (hasBallPossession()) {
                 QVector2D opponentGoal(_opponentGoalX, _opponentGoalY);
 
                 QVector2D attackVector = opponentGoal - _player->getCoordinates();
                 attackVector.normalize();
-                
-                QVector2D target = opponentGoal + attackVector * 0.005f;
 
-                if (_worldMap->isInsideOurArea(target, 1.5f, _player->getPlayerColor())) {
-                    QVector2D ballPos = _worldMap->getBallPosition();
-                    QVector2D goal((_player->getPlayerColor() == VSSRef::BLUE)
-                                    ? _worldMap->getMinX() : _worldMap->getMaxX(),
-                                    0.0f);
+                QVector2D strategicTarget = opponentGoal + attackVector * 0.15;
 
-                    QVector2D direction = target - goal;
-                    direction.normalize();
+                _player->univector(strategicTarget, _worldMap, _worldMap->getRobotRadius(), actuator);
 
-                    target = goal + direction * (_worldMap->getAreaLength() + 0.05f);
-                }
+                QVector2D ballPos = _worldMap->getBallPosition();
+                float distanceToBall = Basic::getDistance(_player->getCoordinates(), ballPos);
 
-                _player->univector(target, _worldMap, _worldMap->getRobotRadius(), actuator);
-            
-
+                std::cout << distanceToBall << "\n" << std::endl;
                 
                 break;
             }
 
             // Se não tem posse, checa se é o mais próximo
             Player* player = _worldMap->getPlayerClosestToBall(_player->getPlayerColor());
-            if (player == _player) {
+            if (player == nullptr || player == _player) {
                 _state = TAKE_BALL_STATE;
             } else {
                 _state = POSITIONING_STATE;
@@ -57,28 +48,21 @@ void AttackWithBallBehavior::execute(ActuatorClient *actuator) {
         case TAKE_BALL_STATE: {
             QVector2D ballPos = _worldMap->getBallPosition();
             QVector2D opponentGoal(_opponentGoalX, _opponentGoalY);
-
-            QVector2D direction = opponentGoal - ballPos;
-            direction.normalize();
-
-            QVector2D target = ballPos - direction * 0.1f;
-
-            if (_worldMap->isInsideOurArea(target, 1.5f, _player->getPlayerColor())) {
-                QVector2D ballPos = _worldMap->getBallPosition();
-                QVector2D goal((_player->getPlayerColor() == VSSRef::BLUE)
-                                ? _worldMap->getMinX() : _worldMap->getMaxX(),
-                                0.0f);
-
-                QVector2D direction = target - goal;
+            
+            if(_worldMap->isBallInOurSide(_player->getPlayerColor())) {
+                QVector2D direction = opponentGoal - ballPos;
                 direction.normalize();
 
-                target = goal + direction * (_worldMap->getAreaLength() + 0.05f);
+                QVector2D behindBallPos = ballPos - direction * 0.1f;
+            
+                _player->univector(behindBallPos, _worldMap, _worldMap->getRobotRadius(), actuator);
+
+            } else {
+                _player->goTo(ballPos, actuator);
             }
 
-            _player->univector(target, _worldMap, _worldMap->getRobotRadius(), actuator);
-
             float distanceToBall = Basic::getDistance(_player->getCoordinates(), ballPos);
-            if (distanceToBall < 5.0f) {
+            if (distanceToBall < 0.06f) {
                 _state = STATE_ATTACK;
             }
         } break;
@@ -103,12 +87,27 @@ bool AttackWithBallBehavior::shouldActivate() {
 
 bool AttackWithBallBehavior::shouldKeepActive() {
     
+    
     return shouldActivate();
 }
 
 int AttackWithBallBehavior::getPriority() const {
     // High priority when we have the ball
-    return _worldMap->isPlayerControllingBall(_player) ? 100 : 90;
+    return hasBallPossession() ? 100 : 90;
+}
+
+bool AttackWithBallBehavior::hasBallPossession() const {
+    // Simply check distance to ball
+    QVector2D ballPos = _worldMap->getBallPosition();
+    QVector2D playerPos = _player->getCoordinates();
+    
+    float distanceToBall = Basic::getDistance(playerPos, ballPos);
+    
+    // Use WorldMap method if available, otherwise use distance
+    if (_worldMap->isPlayerControllingBall(_player)) {
+        return true;
+    }
+    return distanceToBall < BALL_POSSESSION_DIST;
 }
 
 QVector2D AttackWithBallBehavior::calculateBestPosition() {

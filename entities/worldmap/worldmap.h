@@ -69,12 +69,13 @@ public:
     
     // Helper methods for behaviors
     bool isBallInOurSide(Color ourTeam) const {
-        QVector2D ballPos = _ballPosition;
-        return (ourTeam == Color::BLUE) ? (ballPos.x() > 0) : (ballPos.x() <= 0);
+        const float centerLineX = 0.0f;
+        const float ballX = _ballPosition.x();
+        return (ourTeam == Color::BLUE) ? (ballX <= centerLineX) : (ballX > centerLineX);
     }
 
     bool isOurSideLeft(Color ourTeam) const {
-        return (ourTeam == Color::BLUE) ? (false) : (true);
+        return (ourTeam == Color::BLUE);
     }
     
     bool isBallInTheirSide(Color ourTeam) const {
@@ -84,6 +85,7 @@ public:
     
     // Team perception methods
     bool isTeammateNearerToBall(Player* player) const;
+    bool isOurTeamWithBall(Color teamColor) const;
     bool isPlayerControllingBall(Player* player) const;
     Player* getPlayerClosestToBall(Color teamColor) const;
 

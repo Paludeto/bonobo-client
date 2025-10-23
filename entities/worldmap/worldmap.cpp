@@ -199,6 +199,21 @@ bool WorldMap::isPlayerControllingBall(Player* player) const {
     return distance <= controlThreshold;
 }
 
+bool WorldMap::isOurTeamWithBall(Color teamColor) const {
+    QList<Player*> team = (teamColor == Color::BLUE) ? _blueTeam : _yellowTeam;
+    for (Player* player : team) {
+        if(player->getPlayerId() == 0) {
+            continue;
+        }
+
+        if(isPlayerControllingBall(player)){
+            return true;  
+        } 
+    }
+
+    return false;
+}
+
 Player* WorldMap::getPlayerClosestToBall(Color teamColor) const {
     // Get the team
     QList<Player*> team = (teamColor == Color::BLUE) ? _blueTeam : _yellowTeam;
@@ -207,18 +222,33 @@ Player* WorldMap::getPlayerClosestToBall(Color teamColor) const {
     Player* closestPlayer = nullptr;
     float minDistance = std::numeric_limits<float>::max();
     
+    const bool hasAlternatives = team.size() > 1;
+
     for (Player* player : team) {
-        if(player->getPlayerId() == 0) {
+        if (!player) {
+            continue;
+        }
+
+        if (player->getPlayerId() == 0 && hasAlternatives) {
             continue;
         }
 
         float distance = Basic::getDistance(player->getCoordinates(), _ballPosition);
-        
-        if (distance < minDistance - 0.1f) {
+
+        if (distance < minDistance) {
             minDistance = distance;
             closestPlayer = player;
         }
     }
-    
+
+    if (!closestPlayer) {
+        for (Player* player : team) {
+            if (player) {
+                closestPlayer = player;
+                break;
+            }
+        }
+    }
+
     return closestPlayer;
 }

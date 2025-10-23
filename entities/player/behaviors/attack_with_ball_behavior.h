@@ -53,6 +53,13 @@ private:
     // Ball possession tracking
     bool _hadBallPossession;
     
+    // Constants
+    static constexpr float BALL_POSSESSION_DIST = 0.09f;  // Distance for ball possession
+    
+    /**
+     * @brief Check if player has the ball
+     */
+    bool hasBallPossession() const;
     QVector2D calculateBestPosition();
 };
 

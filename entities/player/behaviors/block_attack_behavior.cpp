@@ -33,7 +33,8 @@ void BlockAttackBehavior::execute(ActuatorClient *actuator) {
                     QVector2D direction = target - goal;
                     direction.normalize();
 
-                    target = goal + direction * (_worldMap->getAreaLength() + 0.05f);
+                    target = goal + direction * (_worldMap->getAreaLength() + 0.005f);
+                    
                 }
 
                 _player->univector(target, _worldMap, _worldMap->getRobotRadius(), actuator);
@@ -124,7 +125,7 @@ QVector2D BlockAttackBehavior::calculateInterceptPosition() const {
             
             // Position partway between ball and goal
             float distanceToGoal = Basic::getDistance(ballPos, ourGoal);
-            float positionFactor = 0.05f; // Position 20% of the way from ball to goal
+            float positionFactor = 0.003f; // Position 20% of the way from ball to goal
             
             QVector2D interceptPos = ballPos - goalToBall * (distanceToGoal * positionFactor);
             
