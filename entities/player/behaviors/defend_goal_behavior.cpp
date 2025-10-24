@@ -13,7 +13,7 @@ DefendGoalBehavior::DefendGoalBehavior(Player *player, WorldMap *worldMap, float
 }
 
 void DefendGoalBehavior::execute(ActuatorClient *actuator) {
-    if (isInsideOurArea(_worldMap->getBallPosition(), TAKEOUT_FACTOR_IN)) {
+    if (_worldMap->isInsideOurArea(_worldMap->getBallPosition(), TAKEOUT_FACTOR_IN, _player->getPlayerColor())) {
         _state = STATE_SHORTTAKEOUT;
     }
 
@@ -69,7 +69,7 @@ void DefendGoalBehavior::execute(ActuatorClient *actuator) {
                 actuator->sendCommand(_player->getPlayerId(), 100, -100);
             }
             
-            if (!isInsideOurArea(ballPos, TAKEOUT_FACTOR_OUT)) {
+            if (!_worldMap->isInsideOurArea(ballPos, TAKEOUT_FACTOR_IN, _player->getPlayerColor())) {
                 _state = STATE_GOTO;
             }
         } break;
@@ -154,14 +154,4 @@ bool DefendGoalBehavior::isBallComingToGoal(float postsFactor) {
     float angDiffLeft = fabs(Basic::smallestAngleDiff(angVel, angLeftPost));
 
     return (angDiffRight < angleDiffPosts && angDiffLeft < angleDiffPosts);
-}
-
-// TODO : Correct factors and consts to take ball right
-bool DefendGoalBehavior::isInsideOurArea(const QVector2D& point, float factor) {
-    if(point.x() < -0.5 && point.y() < 0.4 && point.y() > -0.4) {
-        return true;
-    }
-    else {
-        return false;
-    }
 }
