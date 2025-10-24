@@ -41,9 +41,6 @@ public:
 
     void univector(QVector2D& targetPosition, WorldMap *worldMap, float robotRadius, ActuatorClient *actuator);
 
-    // Clear any ongoing skill/behavior state (cache) so movement commands don't persist
-    void clearSkill();
-
 protected:
 
     friend class WorldMap;

@@ -41,7 +41,7 @@ void BlockAttackBehavior::execute(ActuatorClient *actuator) {
                     }
                 }
 
-                _player->univector(target, _worldMap, _worldMap->getRobotRadius(), actuator);
+                _player->goTo(target, actuator);
             } else {
                 _state = POSITIONING_STATE;
             }

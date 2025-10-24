@@ -55,14 +55,14 @@ public:
     float getAreaWidth() const { return 0.15f; }
     
     // Goal positions for blue team (goal at positive X)
-    QVector2D getBlueGoalCenter() const { return QVector2D(getMaxX(), 0.0f); }
+    QVector2D getBlueGoalCenter() const { return QVector2D(getMinX(), 0.0f); }
 
     QVector2D getOurRightPost(VSSRef::Color color) const;
     QVector2D getOurLeftPost(VSSRef::Color color) const;
     QVector2D getOurGoalCenter(VSSRef::Color color) const;
     
     // Goal positions for yellow team (goal at negative X)
-    QVector2D getYellowGoalCenter() const { return QVector2D(getMinX(), 0.0f); }
+    QVector2D getYellowGoalCenter() const { return QVector2D(getMaxX(), 0.0f); }
     
     // Ball and player properties
     float getRobotRadius() const { return 0.056f; }  

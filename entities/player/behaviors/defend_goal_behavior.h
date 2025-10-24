@@ -73,6 +73,15 @@ private:
     QVector2D getFollowBallPos();
 
     /**
+     * @brief Check if a point is inside our goal area
+     * 
+     * @param point Position to check
+     * @param factor Area multiplier (for hysteresis)
+     * @return true if the point is inside our area
+     */
+    bool isInsideOurArea(const QVector2D& point, float factor, Color team);
+
+    /**
      * @brief Check if ball is approaching our goal
      * 
      * @return true if ball is moving toward our goal
