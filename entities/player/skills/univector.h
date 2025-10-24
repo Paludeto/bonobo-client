@@ -13,8 +13,8 @@ public:
 
 private:
     static constexpr float DE = 0.05f;
-    static constexpr float KR = 0.3212f;
-    static constexpr float D_MIN_ROBOT = 0.0588f;
+    static constexpr float KR = 0.28f;
+    static constexpr float D_MIN_ROBOT = 0.6f;
     static constexpr float DELTA = 0.5515f; 
 
     static float hyperbolicSpiral(const QVector2D& p, const QVector2D& target, float de, float kr, bool clockwise);

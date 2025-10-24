@@ -31,7 +31,7 @@ void AttackWithBallBehavior::execute(ActuatorClient *actuator) {
                 QVector2D ballPos = _worldMap->getBallPosition();
                 float distanceToBall = Basic::getDistance(_player->getCoordinates(), ballPos);
 
-                std::cout << distanceToBall << "\n" << std::endl;
+                std::cout << "STATE_ATTACK" << std::endl;
                 
                 break;
             }
