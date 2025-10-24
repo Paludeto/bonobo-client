@@ -10,7 +10,6 @@ GoalkeeperRole::GoalkeeperRole(Player *player, WorldMap *worldMap, float ownGoal
 }
 
 void GoalkeeperRole::initializeBehaviors() {
-    std::cout << "Goalkeeper Role: Initializing behaviors" << std::endl;
     
     // Create and add the defend goal behavior
     auto defendGoalBehavior = std::make_unique<DefendGoalBehavior>(_player, _worldMap, _ownGoalX, _ownGoalY);

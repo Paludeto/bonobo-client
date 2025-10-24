@@ -34,14 +34,13 @@ void BlockAttackBehavior::execute(ActuatorClient *actuator) {
                     float dirLenSq = direction.lengthSquared();
                     if (dirLenSq > 1e-6f) {
                         direction /= std::sqrt(dirLenSq);
-                        target = goal + direction * (_worldMap->getAreaLength() + 0.3f);
+                        target = goal + direction * (_worldMap->getAreaLength() * 0.3f);
                     } else {
                         direction = QVector2D((_player->getPlayerColor() == VSSRef::BLUE) ? 1.0f : -1.0f, 0.0f);
                         target = goal + direction * (_worldMap->getAreaLength() * 0.3f);
                     }
                 }
 
-                std::cout << "TAKE_BALL_STATE" << std::endl;
                 _player->univector(target, _worldMap, _worldMap->getRobotRadius(), actuator);
             } else {
                 _state = POSITIONING_STATE;
