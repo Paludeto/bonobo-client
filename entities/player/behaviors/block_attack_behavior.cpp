@@ -1,5 +1,6 @@
 #include "block_attack_behavior.h"
 #include "basics/basic.h"
+#include <cmath>
 #include <iostream>
 
 BlockAttackBehavior::BlockAttackBehavior(Player *player, WorldMap *worldMap,
@@ -22,8 +23,25 @@ void BlockAttackBehavior::execute(ActuatorClient *actuator) {
             Player *closer = _worldMap->getPlayerClosestToBall(_player->getPlayerColor());
 
             if (closer == _player) {
-                QVector2D desiredPos = calculateInterceptPosition();
-                _player->univector(desiredPos, _worldMap, _worldMap->getRobotRadius(), actuator);
+                QVector2D target = calculateInterceptPosition();
+
+                if (_worldMap->isInsideOurArea(target, 1.5f, _player->getPlayerColor())) {
+                    QVector2D goal((_player->getPlayerColor() == VSSRef::BLUE)
+                                    ? _worldMap->getMinX() : _worldMap->getMaxX(),
+                                    0.0f);
+
+                    QVector2D direction = target - goal;
+                    float dirLenSq = direction.lengthSquared();
+                    if (dirLenSq > 1e-6f) {
+                        direction /= std::sqrt(dirLenSq);
+                        target = goal + direction * (_worldMap->getAreaLength() * 0.3f);
+                    } else {
+                        direction = QVector2D((_player->getPlayerColor() == VSSRef::BLUE) ? 1.0f : -1.0f, 0.0f);
+                        target = goal + direction * (_worldMap->getAreaLength() * 0.3f);
+                    }
+                }
+
+                _player->goTo(target, actuator);
             } else {
                 _state = POSITIONING_STATE;
             }
@@ -95,7 +113,6 @@ bool BlockAttackBehavior::isClosestToBall() const {
 QVector2D BlockAttackBehavior::calculateInterceptPosition() const {
     // Get positions
     QVector2D ballPos = _worldMap->getBallPosition();
-    QVector2D playerPos = _player->getCoordinates();
     QVector2D ourGoal(_ownGoalX, _ownGoalY);
     
     // Determine if the ball is in our half
@@ -105,16 +122,16 @@ QVector2D BlockAttackBehavior::calculateInterceptPosition() const {
     if (inOurHalf) {
         // Defensive position - between ball and our goal
         QVector2D goalToBall = ballPos - ourGoal;
-        
-        if (goalToBall.length() > 0.01f) {
+
+        if (goalToBall.lengthSquared() > 1e-6f) {
             goalToBall.normalize();
-            
+
             // Position partway between ball and goal
             float distanceToGoal = Basic::getDistance(ballPos, ourGoal);
-            float positionFactor = 0.05f; // Position 20% of the way from ball to goal
-            
+            float positionFactor = 0.2f; // Position 20% of the way from ball to goal
+
             QVector2D interceptPos = ballPos - goalToBall * (distanceToGoal * positionFactor);
-            
+
             return interceptPos;
         }
     }

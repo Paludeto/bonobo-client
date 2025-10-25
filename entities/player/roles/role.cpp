@@ -27,7 +27,6 @@ void Role::executeRole(ActuatorClient *actuator) {
             bool spinClockwise = (currentPos.y() > 0); // Gira para o lado que o afasta da parede
             _wallSpinSkill = std::make_unique<WallSpinSkill>(_player, spinClockwise);
             _isStuckOnWall = true;
-            std::cout << "Player " << _player->getPlayerId() << " (Role) - PRESO! Ativando WallSpinSkill." << std::endl;
         }
     }
 

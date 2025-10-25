@@ -55,34 +55,37 @@ public:
     float getAreaWidth() const { return 0.15f; }
     
     // Goal positions for blue team (goal at positive X)
-    QVector2D getBlueGoalCenter() const { return QVector2D(getMaxX(), 0.0f); }
+    QVector2D getBlueGoalCenter() const { return QVector2D(getMinX(), 0.0f); }
 
     QVector2D getOurRightPost(VSSRef::Color color) const;
     QVector2D getOurLeftPost(VSSRef::Color color) const;
     QVector2D getOurGoalCenter(VSSRef::Color color) const;
     
     // Goal positions for yellow team (goal at negative X)
-    QVector2D getYellowGoalCenter() const { return QVector2D(getMinX(), 0.0f); }
+    QVector2D getYellowGoalCenter() const { return QVector2D(getMaxX(), 0.0f); }
     
     // Ball and player properties
     float getRobotRadius() const { return 0.056f; }  
     
     // Helper methods for behaviors
     bool isBallInOurSide(Color ourTeam) const {
-        QVector2D ballPos = _ballPosition;
-        return (ourTeam == Color::BLUE) ? (ballPos.x() > 0) : (ballPos.x() <= 0);
+        const float centerLineX = 0.0f;
+        const float ballX = _ballPosition.x();
+        return (ourTeam == Color::BLUE) ? (ballX <= centerLineX) : (ballX > centerLineX);
     }
 
     bool isOurSideLeft(Color ourTeam) const {
-        return (ourTeam == Color::BLUE) ? (false) : (true);
+        return (ourTeam == Color::BLUE);
     }
     
     bool isBallInTheirSide(Color ourTeam) const {
         return !isBallInOurSide(ourTeam);
     }
+    bool isInsideOurArea(const QVector2D& point, float factor, VSSRef::Color team);
     
     // Team perception methods
     bool isTeammateNearerToBall(Player* player) const;
+    bool isOurTeamWithBall(Color teamColor) const;
     bool isPlayerControllingBall(Player* player) const;
     Player* getPlayerClosestToBall(Color teamColor) const;
 

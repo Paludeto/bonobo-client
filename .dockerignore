@@ -1,0 +1,26 @@
+# Git & editor metadata
+.git
+.gitignore
+.vscode
+.idea
+
+# Build artifacts
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake-build*/
+CMakeFiles/**
+*.o
+*.a
+*.so
+*.lo
+*.la
+*.d
+
+# Proto generated binaries
+proto/libpb_msgs_lib.a
+proto/*.o
+
+# OS files
+.DS_Store
+Thumbs.db

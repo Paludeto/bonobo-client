@@ -5,7 +5,6 @@
 WallSpinSkill::WallSpinSkill(Player *player, bool spinClockwise)
     : SkillManager(player), _spinClockwise(spinClockwise), _isComplete(false) {
     _spinTimer.start();
-    std::cout << "Player " << _player->getPlayerId() << ": Iniciando giro para descolar da parede." << std::endl;
 }
 
 void WallSpinSkill::runSkill(ActuatorClient *actuator) {

@@ -73,25 +73,25 @@ private:
     QVector2D getFollowBallPos();
 
     /**
-     * @brief Check if ball is approaching our goal
-     * 
-     * @return true if ball is moving toward our goal
-     */
-    bool isBallComingToGoal(float postsFactor);
-
-    /**
      * @brief Check if a point is inside our goal area
      * 
      * @param point Position to check
      * @param factor Area multiplier (for hysteresis)
      * @return true if the point is inside our area
      */
-    bool isInsideOurArea(const QVector2D& point, float factor);
+    bool isInsideOurArea(const QVector2D& point, float factor, Color team);
+
+    /**
+     * @brief Check if ball is approaching our goal
+     * 
+     * @return true if ball is moving toward our goal
+     */
+    bool isBallComingToGoal(float postsFactor);
 
     // Constants
     static constexpr float BALL_MINVELOCITY = 0.5f;
-    static constexpr float TAKEOUT_FACTOR_IN = 0.7f; 
-    static constexpr float TAKEOUT_FACTOR_OUT = 0.8f;
+    static constexpr float TAKEOUT_FACTOR_IN = 1.0f; 
+    static constexpr float TAKEOUT_FACTOR_OUT = 1.1f;
     static constexpr float POSTSFACTOR = 1.75f;
 };
 

@@ -13,7 +13,7 @@ DefendGoalBehavior::DefendGoalBehavior(Player *player, WorldMap *worldMap, float
 }
 
 void DefendGoalBehavior::execute(ActuatorClient *actuator) {
-    if (isInsideOurArea(_worldMap->getBallPosition(), TAKEOUT_FACTOR_IN)) {
+    if (isInsideOurArea(_worldMap->getBallPosition(), TAKEOUT_FACTOR_IN, _player->getPlayerColor())) {
         _state = STATE_SHORTTAKEOUT;
     }
 
@@ -30,7 +30,9 @@ void DefendGoalBehavior::execute(ActuatorClient *actuator) {
                 targetY = 0.0f;
             }
             
-            float targetX = (_player->getPlayerColor() == VSSRef::Color::YELLOW) ? 0.65f : -0.65f;
+            // Use _ownGoalX to position goalkeeper correctly based on which goal they're defending
+            float signal = _ownGoalX > 0 ? -1 : 1;
+            float targetX = _ownGoalX + signal * 0.1f;  // Position slightly in front of goal
             QVector2D finalPos(targetX, targetY);
 
 
@@ -63,13 +65,32 @@ void DefendGoalBehavior::execute(ActuatorClient *actuator) {
         
         case STATE_SHORTTAKEOUT: {
             QVector2D ballPos = _worldMap->getBallPosition();
-            _player->goTo(ballPos, actuator); 
+            QVector2D ourGoal(_ownGoalX, _ownGoalY);
+            QVector2D goalToBall = ballPos - ourGoal;
+            QVector2D interceptPos;
 
-            if (Basic::getDistance(_player->getCoordinates(), ballPos) < 0.08f) {
-                actuator->sendCommand(_player->getPlayerId(), 100, -100);
+            if (goalToBall.lengthSquared() > 1e-6f) {
+                goalToBall.normalize();
+
+                // Position partway between ball and goal
+                float distanceToGoal = Basic::getDistance(ballPos, ourGoal);
+                float positionFactor = 0.2f; // Position 20% of the way from ball to goal
+
+                interceptPos = ballPos - goalToBall * (distanceToGoal * positionFactor);
+            }
+
+            _player->goTo(interceptPos, actuator); 
+
+            if (Basic::getDistance(_player->getCoordinates(), ballPos) < 0.06f) {
+                if(ballPos.y() >= 0) {
+                    actuator->sendCommand(_player->getPlayerId(), -200, 200);
+                } else {
+                    actuator->sendCommand(_player->getPlayerId(), 200, -200);
+                }
+                
             }
             
-            if (!isInsideOurArea(ballPos, TAKEOUT_FACTOR_OUT)) {
+            if (!isInsideOurArea(ballPos, TAKEOUT_FACTOR_IN, _player->getPlayerColor())) {
                 _state = STATE_GOTO;
             }
         } break;
@@ -156,12 +177,21 @@ bool DefendGoalBehavior::isBallComingToGoal(float postsFactor) {
     return (angDiffRight < angleDiffPosts && angDiffLeft < angleDiffPosts);
 }
 
-// TODO : Correct factors and consts to take ball right
-bool DefendGoalBehavior::isInsideOurArea(const QVector2D& point, float factor) {
-    if(point.x() < -0.5 && point.y() < 0.4 && point.y() > -0.4) {
-        return true;
+bool DefendGoalBehavior::isInsideOurArea(const QVector2D& point, float factor, Color team) {
+    if(team == VSSRef::Color::BLUE) {
+        if(point.x() < -0.5 && point.y() < 0.4 && point.y() > -0.4) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    } else {
+        if(point.x() > 0.5 && point.y() < 0.4 && point.y() > -0.4) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
-    else {
-        return false;
-    }
+
 }

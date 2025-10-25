@@ -27,15 +27,16 @@ void AttackWithBallBehavior::execute(ActuatorClient *actuator) {
                 QVector2D strategicTarget = opponentGoal + attackVector * 0.15;
 
                 _player->univector(strategicTarget, _worldMap, _worldMap->getRobotRadius(), actuator);
-                std::cout << "To aqui\n";
+
+                QVector2D ballPos = _worldMap->getBallPosition();
+                float distanceToBall = Basic::getDistance(_player->getCoordinates(), ballPos);
                 
                 break;
             }
-            std::cout << _player->getVelocity().x() << "\n";
 
             // Se não tem posse, checa se é o mais próximo
             Player* player = _worldMap->getPlayerClosestToBall(_player->getPlayerColor());
-            if (player == _player) {
+            if (player == nullptr || player == _player) {
                 _state = TAKE_BALL_STATE;
             } else {
                 _state = POSITIONING_STATE;
@@ -45,17 +46,21 @@ void AttackWithBallBehavior::execute(ActuatorClient *actuator) {
         case TAKE_BALL_STATE: {
             QVector2D ballPos = _worldMap->getBallPosition();
             QVector2D opponentGoal(_opponentGoalX, _opponentGoalY);
-
-            QVector2D direction = opponentGoal - ballPos;
-            direction.normalize();
-
-            QVector2D behindBallPos = ballPos - direction * 0.1f;
             
-            std::cout << _player->getVelocity().x() << "\n";
-            _player->univector(behindBallPos, _worldMap, _worldMap->getRobotRadius(), actuator);
+            if(_worldMap->isBallInOurSide(_player->getPlayerColor())) {
+                QVector2D direction = opponentGoal - ballPos;
+                direction.normalize();
+
+                QVector2D behindBallPos = ballPos - direction * 0.1f;
+            
+                _player->univector(behindBallPos, _worldMap, _worldMap->getRobotRadius(), actuator);
+
+            } else {
+                _player->goTo(ballPos, actuator);
+            }
 
             float distanceToBall = Basic::getDistance(_player->getCoordinates(), ballPos);
-            if (distanceToBall < 5.0f) {
+            if (distanceToBall < 0.06f) {
                 _state = STATE_ATTACK;
             }
         } break;
