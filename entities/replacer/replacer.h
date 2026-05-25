@@ -1,3 +1,4 @@
+#include <QHash>
 #ifndef REPLACER_H
 #define REPLACER_H
 
